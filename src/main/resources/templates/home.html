@@ -1,14 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Home</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
 <h1>Bem-vindo(a) ao GS Synapse</h1>
+
 <nav>
-    <a th:href="@{/competencias}">Competências</a> |
-    <a th:href="@{/logout}">Sair</a>
+    <ul>
+        <li><a th:href="@{/competencias}">Competências</a></li>
+        <li><a th:href="@{/usuarios}">Usuários</a></li>
+        <li><a th:href="@{/recomendacoes}">Recomendações Gerais</a></li>
+        <li><a th:href="@{/recomendacoes/saude}">Recomendações de Saúde</a></li>
+        <li><a th:href="@{/recomendacoes/profissionais}">Recomendações Profissionais</a></li>
+        <li><a th:href="@{/bemestar}">Registro de Bem-Estar</a></li>
+        <li><a th:href="@{/logout}">Sair</a></li>
+    </ul>
 </nav>
+
+<hr/>
+
+<h2>O que deseja acessar?</h2>
+<p>Escolha no menu acima.</p>
+
 </body>
 </html>

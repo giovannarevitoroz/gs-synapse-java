@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Bem-Estar</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<h1>Gerenciar Registro de Bem-Estar</h1>
+
+<!-- Formulário de Cadastro / Edição -->
+<h2 th:text="${registroDTO.idRegistro != null} ? 'Editar Registro' : 'Novo Registro'"></h2>
+
+<form th:action="@{/bemestar/salvar}" th:object="${registroDTO}" method="post">
+
+    <input type="hidden" th:field="*{idRegistro}" />
+
+    <label>Data:</label>
+    <input type="date" th:field="*{dataRegistro}" required/><br/>
+
+    <label>Humor:</label>
+    <input type="text" th:field="*{humorRegistro}" required/><br/>
+
+    <label>Horas de Sono:</label>
+    <input type="number" th:field="*{horasSono}" required/><br/>
+
+    <label>Horas de Trabalho:</label>
+    <input type="number" th:field="*{horasTrabalho}" required/><br/>
+
+    <label>Nível de Energia:</label>
+    <input type="number" th:field="*{nivelEnergia}" min="0" max="10" required/><br/>
+
+    <label>Nível de Estresse:</label>
+    <input type="number" th:field="*{nivelEstresse}" min="0" max="10" required/><br/>
+
+    <label>Observações:</label><br/>
+    <textarea th:field="*{observacaoRegistro}" rows="4"></textarea><br/>
+
+    <label>ID do Usuário:</label>
+    <input type="number" th:field="*{usuarioId}" required/><br/>
+
+    <button type="submit"
+            th:text="${registroDTO.idRegistro != null} ? 'Atualizar' : 'Salvar'"></button>
+</form>
+
+<hr/>
+
+<!-- LISTAGEM -->
+<h2>Registros Existentes</h2>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Data</th>
+        <th>Humor</th>
+        <th>Sono</th>
+        <th>Trabalho</th>
+        <th>Energia</th>
+        <th>Estresse</th>
+        <th>Obs</th>
+        <th>Usuário</th>
+        <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="reg : ${registros}">
+        <td th:text="${reg.idRegistro}"></td>
+        <td th:text="${reg.dataRegistro}"></td>
+        <td th:text="${reg.humorRegistro}"></td>
+        <td th:text="${reg.horasSono}"></td>
+        <td th:text="${reg.horasTrabalho}"></td>
+        <td th:text="${reg.nivelEnergia}"></td>
+        <td th:text="${reg.nivelEstresse}"></td>
+        <td th:text="${reg.observacaoRegistro}"></td>
+        <td th:text="${reg.usuarioId}"></td>
+
+        <td>
+            <a th:href="@{/bemestar/editar/{id}(id=${reg.idRegistro})}">Editar</a> |
+            <a th:href="@{/bemestar/deletar/{id}(id=${reg.idRegistro})}"
+               onclick="return confirm('Deseja realmente excluir?');">Excluir</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

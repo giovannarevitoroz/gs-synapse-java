@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
+import java.util.List;
 import java.util.Locale;
 
 @Service
@@ -55,6 +56,21 @@ public class RecomendacaoSaudeService {
         rabbitTemplate.convertAndSend(QUEUE_NAME, "Nova recomendação de saúde criada: " + saude.getIdRecomendacao());
 
         return dto;
+    }
+
+    public List<RecomendacaoSaudeDTO> listarTodos(Locale locale) {
+        return recomendacaoSaudeRepository.findAll().stream().map(saude -> {
+            RecomendacaoSaudeDTO dto = new RecomendacaoSaudeDTO();
+            dto.setIdRecomendacao(saude.getIdRecomendacao());
+            dto.setTipoSaude(saude.getTipoSaude());
+            dto.setNivelAlerta(saude.getNivelAlerta());
+            dto.setMensagemSaude(saude.getMensagemSaude());
+            return dto;
+        }).toList();
+    }
+
+    public boolean existe(Long id) {
+        return recomendacaoSaudeRepository.existsById(id);
     }
 
     @Cacheable(value = "recomendacoesSaude")
