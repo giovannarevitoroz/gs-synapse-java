@@ -1,9 +1,9 @@
-# Etapa 1: Build da aplicação com Maven
+# Etapa 1: Build da aplicação com Maven Wrapper
 FROM ubuntu:latest AS build
 
 # Instala dependências
 RUN apt-get update && \
-    apt-get install -y openjdk-17-jdk maven
+    apt-get install -y openjdk-17-jdk wget unzip git
 
 # Define diretório de trabalho
 WORKDIR /app
@@ -11,8 +11,11 @@ WORKDIR /app
 # Copia tudo para o container
 COPY . .
 
-# Build da aplicação (sem testes)
-RUN mvn clean install -DskipTests
+# Garante permissão de execução para o Maven Wrapper
+RUN chmod +x mvnw
+
+# Build da aplicação (sem testes) usando Maven Wrapper
+RUN ./mvnw clean install -DskipTests
 
 # Etapa 2: Imagem leve para rodar o app
 FROM eclipse-temurin:17-jre-jammy
