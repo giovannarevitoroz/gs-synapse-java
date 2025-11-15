@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class RecomendacaoService {
 
@@ -31,6 +33,14 @@ public class RecomendacaoService {
         this.usuarioRepository = usuarioRepository;
         this.rabbitTemplate = rabbitTemplate;
     }
+
+    public List<RecomendacaoDTO> listarTodos() {
+        return recomendacaoRepository.findAll()
+                .stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
 
     // LISTAR PAGINADO + CACHE
     @Cacheable(value = "recomendacoes", key = "#pageable.pageNumber + '-' + #pageable.pageSize")
