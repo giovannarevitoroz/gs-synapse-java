@@ -10,11 +10,11 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/recomendacoes/profissionais")
-public class RecomendacaoProfissionalController {
+public class RecomendacaoProfissionalViewController {
 
     private final RecomendacaoProfissionalService service;
 
-    public RecomendacaoProfissionalController(RecomendacaoProfissionalService service) {
+    public RecomendacaoProfissionalViewController(RecomendacaoProfissionalService service) {
         this.service = service;
     }
 

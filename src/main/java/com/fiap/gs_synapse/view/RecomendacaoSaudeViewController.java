@@ -10,11 +10,11 @@ import java.util.Locale;
 
 @Controller
 @RequestMapping("/recomendacoes/saude")
-public class RecomendacaoSaudeController {
+public class RecomendacaoSaudeViewController {
 
     private final RecomendacaoSaudeService service;
 
-    public RecomendacaoSaudeController(RecomendacaoSaudeService service) {
+    public RecomendacaoSaudeViewController(RecomendacaoSaudeService service) {
         this.service = service;
     }
 

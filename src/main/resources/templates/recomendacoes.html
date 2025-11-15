@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Recomendações</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<main class="content">
+    <div class="page-container">
+
+        <h1>Recomendações</h1>
+
+        <div class="card">
+            <h2>Nova Recomendação</h2>
+
+            <form th:action="@{/recomendacoes/salvar}" th:object="${recomendacaoDTO}" method="post">
+                <label>Título</label>
+                <input type="text" th:field="*{tituloRecomendacao}" required>
+
+                <label>Descrição</label>
+                <textarea th:field="*{descricaoRecomendacao}" required></textarea>
+
+                <label>Prompt Usado</label>
+                <input type="text" th:field="*{promptUsado}" required>
+
+                <label>Data</label>
+                <input type="date" th:field="*{dataRecomendacao}" required>
+
+                <label>ID Usuário</label>
+                <input type="number" th:field="*{usuarioId}" >
+
+                <button type="submit">Salvar</button>
+            </form>
+        </div>
+
+        <br>
+
+        <div class="card">
+            <h2>Recomendações Existentes</h2>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Descrição</th>
+                    <th>Prompt</th>
+                    <th>Data</th>
+                    <th>Usuário</th>
+                    <th>Ações</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="rec : ${recomendacoes}">
+                    <td th:text="${rec.idRecomendacao}"></td>
+                    <td th:text="${rec.tituloRecomendacao}"></td>
+                    <td th:text="${rec.descricaoRecomendacao}"></td>
+                    <td th:text="${rec.promptUsado}"></td>
+                    <td th:text="${rec.dataRecomendacao}"></td>
+                    <td th:text="${rec.usuarioId}"></td>
+
+                    <td>
+                        <a class="btn-link" th:href="@{/recomendacoes/editar/{id}(id=${rec.idRecomendacao})}">Editar</a>
+                        <a class="btn-danger" th:href="@{/recomendacoes/deletar/{id}(id=${rec.idRecomendacao})}"
+                           onclick="return confirm('Deseja realmente deletar?')">Deletar</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</main>
+</body>
+</html>

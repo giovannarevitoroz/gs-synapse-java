@@ -1,43 +1,58 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <title>Login / Criar Conta</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-<h1>Login</h1>
-<form th:action="@{/login}" method="post">
-    <label>Usuário:</label>
-    <input type="text" name="username" required />
-    <label>Senha:</label>
-    <input type="password" name="password" required />
-    <button type="submit">Entrar</button>
-</form>
 
-<hr />
+<body class="login-body">
 
-<h2>Criar Conta</h2>
-<form th:action="@{/usuarios}" th:object="${usuarioDTO}" method="post">
-    <label>Nome de Usuário:</label>
-    <input type="text" th:field="*{nomeUsuario}" required />
+<div class="login-container">
 
-    <label>Senha:</label>
-    <input type="password" th:field="*{senhaUsuario}" required />
+    <!-- LOGIN -->
+    <div class="card login-card">
+        <h2>Acessar Conta</h2>
 
-    <label>Área Atual:</label>
-    <input type="text" th:field="*{areaAtual}" required />
+        <form th:action="@{/login}" method="post">
+            <label>Usuário</label>
+            <input type="text" name="username" required>
 
-    <label>Área de Interesse:</label>
-    <input type="text" th:field="*{areaInteresse}" required />
+            <label>Senha</label>
+            <input type="password" name="password" required>
 
-    <label>Objetivo de Carreira:</label>
-    <input type="text" th:field="*{objetivoCarreira}" required />
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
 
-    <label>Nível de Experiência:</label>
-    <input type="text" th:field="*{nivelExperiencia}" required />
+    <!-- CADASTRO -->
+    <div class="card login-card">
+        <h2>Criar Conta</h2>
 
-    <button type="submit">Criar Conta</button>
-</form>
+        <form th:action="@{/usuarios}" th:object="${usuarioDTO}" method="post">
+
+            <label>Nome de Usuário</label>
+            <input type="text" th:field="*{nomeUsuario}" required>
+
+            <label>Senha</label>
+            <input type="password" th:field="*{senhaUsuario}" required>
+
+            <label>Área Atual</label>
+            <input type="text" th:field="*{areaAtual}" required>
+
+            <label>Área de Interesse</label>
+            <input type="text" th:field="*{areaInteresse}" required>
+
+            <label>Objetivo de Carreira</label>
+            <input type="text" th:field="*{objetivoCarreira}" required>
+
+            <label>Nível de Experiência</label>
+            <input type="text" th:field="*{nivelExperiencia}" required>
+
+            <button type="submit">Criar Conta</button>
+        </form>
+    </div>
+</div>
+
 </body>
 </html>

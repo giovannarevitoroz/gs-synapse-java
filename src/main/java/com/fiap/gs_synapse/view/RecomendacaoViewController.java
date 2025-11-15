@@ -21,7 +21,7 @@ public class RecomendacaoViewController {
     public String listar(Model model) {
         model.addAttribute("recomendacoes", service.listarTodos()); // método que retorna lista completa
         model.addAttribute("recomendacaoDTO", new RecomendacaoDTO());
-        return "recomendacao"; // templates/recomendacao.html
+        return "recomendacao"; // templates/recomendacoes.html
     }
 
     // SALVAR NOVA RECOMENDAÇÃO
@@ -36,7 +36,7 @@ public class RecomendacaoViewController {
     public String editar(@PathVariable Long id, Model model) {
         RecomendacaoDTO dto = service.buscarPorId(id);
         model.addAttribute("recomendacaoDTO", dto);
-        return "editar-recomendacao"; // templates/editar-recomendacao.html
+        return "editar-recomendacao"; // templates/editar-recomendacoes.html
     }
 
     @PostMapping("/atualizar/{id}")
