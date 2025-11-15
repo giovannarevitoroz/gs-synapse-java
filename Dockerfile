@@ -14,7 +14,7 @@ COPY . .
 # Garante permissão de execução para o Maven Wrapper
 RUN chmod +x mvnw
 
-# Explicitly set JAVA_HOME for the Maven Wrapper
+# Inside your Dockerfile's build stage (before the mvnw command)
 ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64
 
 # Build da aplicação (sem testes) usando Maven Wrapper
