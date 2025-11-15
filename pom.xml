@@ -84,8 +84,9 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
-			<!-- A versão é puxada da propriedade flyway.version definida acima. -->
+			<version>11.0.0</version> <!-- ou mais recente -->
 		</dependency>
+
 
 		<!-- Lombok -->
 		<dependency>
