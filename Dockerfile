@@ -14,6 +14,9 @@ COPY . .
 # Garante permissão de execução para o Maven Wrapper
 RUN chmod +x mvnw
 
+# Explicitly set JAVA_HOME for the Maven Wrapper
+ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64
+
 # Build da aplicação (sem testes) usando Maven Wrapper
 RUN ./mvnw clean install -DskipTests
 
