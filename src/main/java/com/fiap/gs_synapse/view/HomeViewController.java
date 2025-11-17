@@ -10,7 +10,9 @@ public class HomeViewController {
 
     // Tela inicial / dashboard
     @GetMapping("/home")
-    public String home() {
+    public String home(Model model) {
+        model.addAttribute("tituloPagina", "Dashboard");
+        model.addAttribute("conteudo", "fragments/home :: homeFragment");
         return "home";
     }
 
@@ -32,7 +34,6 @@ public class HomeViewController {
         return "redirect:/competencias/listar";
     }
 
-    // 🛠️ MANTIDO: Rota de entrada que REDIRECIONA para a rota de listagem específica
     @GetMapping("/usuarios")
     public String usuarios() {
         return "redirect:/usuarios/listar";

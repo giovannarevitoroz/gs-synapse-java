@@ -1,0 +1,30 @@
+package com.fiap.gs_synapse.service;
+
+import com.fiap.gs_synapse.model.Usuario;
+import com.fiap.gs_synapse.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.*;
+import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+
+@Service
+public class CustomUserDetailsService implements UserDetailsService {
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Usuario usuario = usuarioRepository.findByNomeUsuario(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+
+        // Aqui você pode mapear roles se tiver campo de perfil/role
+        return new org.springframework.security.core.userdetails.User(
+                usuario.getNomeUsuario(),
+                usuario.getSenhaUsuario(),
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")) // default
+        );
+    }
+}

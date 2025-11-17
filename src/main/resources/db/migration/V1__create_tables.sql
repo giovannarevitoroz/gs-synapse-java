@@ -87,7 +87,7 @@ CREATE TABLE registro_bem_estar (
 );
 
 ----------------------------------------
--- TABELA USUARIO
+-- TABELA USUARIO (COM ROLE)
 ----------------------------------------
 CREATE TABLE usuario (
     id_usuario        BIGINT PRIMARY KEY DEFAULT nextval('seq_usuario'),
@@ -98,7 +98,8 @@ CREATE TABLE usuario (
     objetivo_carreira VARCHAR(255) NOT NULL,
     nivel_experiencia VARCHAR(50) NOT NULL CHECK (
         nivel_experiencia IN ('Nenhuma', 'Estagiário', 'Júnior', 'Sênior', 'Pleno')
-    )
+    ),
+    role              VARCHAR(20) NOT NULL DEFAULT 'USER' CHECK (role IN ('USER', 'ADMIN'))
 );
 
 ----------------------------------------
@@ -113,7 +114,6 @@ CREATE TABLE usuario_competencia (
 ----------------------------------------
 -- FOREIGN KEYS
 ----------------------------------------
-
 ALTER TABLE recomendacao_profissional
     ADD CONSTRAINT recomendacao_profissional_fk
         FOREIGN KEY (id_recomendacao)
@@ -143,3 +143,22 @@ ALTER TABLE usuario_competencia
     ADD CONSTRAINT usuario_comp_usuario_fk
         FOREIGN KEY (usuario_id_usuario)
         REFERENCES usuario (id_usuario);
+
+
+INSERT INTO usuario (
+    nome_usuario,
+    senha_usuario,
+    area_atual,
+    area_interesse,
+    objetivo_carreira,
+    nivel_experiencia,
+    role
+) VALUES (
+    'admin',
+    '$2a$10$w3gkT9yB6mNf/8XK1bZ8eOlL/2XgC9xvJ/TuU5VQw3K0U/ZU1aE3G',
+    'Administração',
+    'Gestão',
+    'Gerenciar o sistema',
+    'Sênior',
+    'ADMIN'
+);
