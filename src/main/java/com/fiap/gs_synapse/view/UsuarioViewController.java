@@ -1,4 +1,4 @@
-package com.fiap.gs_synapse.controller;
+package com.fiap.gs_synapse.view;
 
 import com.fiap.gs_synapse.dto.UsuarioDTO;
 import com.fiap.gs_synapse.model.Competencia;

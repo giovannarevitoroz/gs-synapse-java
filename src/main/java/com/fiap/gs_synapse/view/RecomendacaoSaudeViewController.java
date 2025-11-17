@@ -1,3 +1,4 @@
+package com.fiap.gs_synapse.view;
 
 import com.fiap.gs_synapse.dto.RecomendacaoSaudeDTO;
 import com.fiap.gs_synapse.service.RecomendacaoSaudeService;
