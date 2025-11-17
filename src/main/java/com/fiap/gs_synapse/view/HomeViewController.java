@@ -32,6 +32,7 @@ public class HomeViewController {
         return "redirect:/competencias/listar";
     }
 
+    // 🛠️ MANTIDO: Rota de entrada que REDIRECIONA para a rota de listagem específica
     @GetMapping("/usuarios")
     public String usuarios() {
         return "redirect:/usuarios/listar";
