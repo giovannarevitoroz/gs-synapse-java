@@ -9,5 +9,6 @@ import org.springframework.cache.annotation.EnableCaching;
 public class GsSynapseApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GsSynapseApplication.class, args);
+		System.out.println("Synapse build sucess");
 	}
 }

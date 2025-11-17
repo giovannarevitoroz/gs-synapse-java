@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Usuários</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<h1>Gerenciamento de Usuários</h1>
+
+<!-- Formulário -->
+<h2 th:text="${usuarioDTO.idUsuario != null} ? 'Editar Usuário' : 'Novo Usuário'"></h2>
+
+<form th:action="@{/usuarios/salvar}" th:object="${usuarioDTO}" method="post">
+
+    <input type="hidden" th:field="*{idUsuario}"/>
+
+    <label>Nome:</label>
+    <input type="text" th:field="*{nomeUsuario}" required/><br/>
+
+    <label>Senha:</label>
+    <input type="password" th:field="*{senhaUsuario}" required/><br/>
+
+    <label>Área Atual:</label>
+    <input type="text" th:field="*{areaAtual}" required/><br/>
+
+    <label>Área de Interesse:</label>
+    <input type="text" th:field="*{areaInteresse}" required/><br/>
+
+    <label>Objetivo de Carreira:</label>
+    <input type="text" th:field="*{objetivoCarreira}" required/><br/>
+
+    <label>Nível de Experiência:</label>
+    <input type="text" th:field="*{nivelExperiencia}" required/><br/>
+
+    <label>Competências:</label><br/>
+    <div th:each="comp : ${competencias}">
+        <input type="checkbox"
+               th:value="${comp.idCompetencia}"
+               th:field="*{competenciasIds}"
+               th:checked="${usuarioDTO.competenciasIds != null and usuarioDTO.competenciasIds.contains(comp.idCompetencia)}"/>
+        <span th:text="${comp.nomeCompetencia}"></span><br/>
+    </div>
+
+    <button type="submit"
+            th:text="${usuarioDTO.idUsuario != null} ? 'Atualizar' : 'Salvar'"></button>
+
+</form>
+
+<hr/>
+
+<!-- Lista de usuários -->
+<h2>Usuários Registrados</h2>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Área Atual</th>
+        <th>Interesse</th>
+        <th>Experiência</th>
+        <th>Competências</th>
+        <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="u : ${usuarios}">
+        <td th:text="${u.idUsuario}"></td>
+        <td th:text="${u.nomeUsuario}"></td>
+        <td th:text="${u.areaAtual}"></td>
+        <td th:text="${u.areaInteresse}"></td>
+        <td th:text="${u.nivelExperiencia}"></td>
+        <td>
+            <span th:each="c : ${u.competencias}">
+                <span th:text="${c.nomeCompetencia}"></span><br/>
+            </span>
+        </td>
+
+        <td>
+            <a th:href="@{/usuarios/editar/{id}(id=${u.idUsuario})}">Editar</a> |
+            <a th:href="@{/usuarios/deletar/{id}(id=${u.idUsuario})}"
+               onclick="return confirm('Deseja realmente excluir?');">Deletar</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

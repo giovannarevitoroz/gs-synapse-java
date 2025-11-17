@@ -18,7 +18,7 @@ RUN chmod +x mvnw
 ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64
 
 # Build da aplicação (sem testes) usando Maven Wrapper
-RUN ./mvnw clean install -DskipTests
+RUN ./mvnw clean install -DskipTests -Dfile.encoding=UTF-8
 
 # Etapa 2: Imagem leve para rodar o app
 FROM eclipse-temurin:17-jre-jammy

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Recomendações de Saúde</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h1>Gerenciar Recomendações de Saúde</h1>
+
+<!-- FORMULÁRIO PARA CRIAR OU EDITAR -->
+<h2 th:text="${recomendacaoSaudeDTO.idRecomendacao != null} ? 'Editar Recomendação de Saúde' : 'Nova Recomendação de Saúde'"></h2>
+<form th:action="@{/recomendacoes/saude/salvar}" th:object="${recomendacaoSaudeDTO}" method="post">
+
+    <input type="hidden" th:field="*{idRecomendacao}"/>
+
+    <label>ID da Recomendação:</label>
+    <input type="number" th:field="*{idRecomendacao}" required/><br/>
+
+    <label>Tipo de Saúde:</label>
+    <input type="text" th:field="*{tipoSaude}" required/><br/>
+
+    <label>Nível de Alerta:</label>
+    <input type="text" th:field="*{nivelAlerta}" required/><br/>
+
+    <label>Mensagem:</label>
+    <textarea th:field="*{mensagemSaude}" rows="5" required></textarea><br/>
+
+    <button type="submit" th:text="${recomendacaoSaudeDTO.idRecomendacao != null} ? 'Atualizar' : 'Salvar'"></button>
+</form>
+
+<hr/>
+
+<!-- LISTA DE RECOMENDAÇÕES -->
+<h2>Recomendações de Saúde Existentes</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Tipo</th>
+        <th>Nível Alerta</th>
+        <th>Mensagem</th>
+        <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="rec : ${recomendacoes}">
+        <td th:text="${rec.idRecomendacao}"></td>
+        <td th:text="${rec.tipoSaude}"></td>
+        <td th:text="${rec.nivelAlerta}"></td>
+        <td th:text="${rec.mensagemSaude}"></td>
+        <td>
+            <a th:href="@{/recomendacoes/saude/editar/{id}(id=${rec.idRecomendacao})}">Editar</a> |
+            <a th:href="@{/recomendacoes/saude/deletar/{id}(id=${rec.idRecomendacao})}"
+               onclick="return confirm('Deseja realmente deletar?');">Deletar</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
