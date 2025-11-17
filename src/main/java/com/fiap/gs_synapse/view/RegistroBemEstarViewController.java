@@ -19,7 +19,7 @@ public class RegistroBemEstarViewController {
     }
 
     // LISTAR + FORM
-    @GetMapping
+    @GetMapping("/listar") // FIX: Mapeado para /bemestar/listar
     public String listar(Model model,
                          @RequestParam(defaultValue = "0") int page,
                          @RequestParam(defaultValue = "10") int size) {
@@ -41,7 +41,7 @@ public class RegistroBemEstarViewController {
         } else {
             service.atualizar(dto.getIdRegistro(), dto);
         }
-        return "redirect:/bemestar";
+        return "redirect:/bemestar/listar"; // FIX: Redireciona para listar
     }
 
     // EDITAR
@@ -62,6 +62,6 @@ public class RegistroBemEstarViewController {
     @GetMapping("/deletar/{id}")
     public String deletar(@PathVariable Long id) {
         service.deletar(id);
-        return "redirect:/bemestar";
+        return "redirect:/bemestar/listar"; // FIX: Redireciona para listar
     }
 }

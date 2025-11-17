@@ -20,9 +20,8 @@ public class RecomendacaoSaudeViewController {
     }
 
     // LISTAR TODAS
-    @GetMapping
+    @GetMapping("/listar") // FIX: Mapeado para /recomendacoes/saude/listar
     public String listarTodas(Model model, Locale locale) {
-        // Como não há método listarTodos no service, você pode criar um ou apenas listar pelo banco direto
         List<RecomendacaoSaudeDTO> recomendacoes = service.listarTodos(locale);
         model.addAttribute("recomendacoes", recomendacoes);
         model.addAttribute("recomendacaoSaudeDTO", new RecomendacaoSaudeDTO());
@@ -37,7 +36,7 @@ public class RecomendacaoSaudeViewController {
         } else {
             service.criar(dto, locale);
         }
-        return "redirect:/recomendacoes/saude";
+        return "redirect:/recomendacoes/saude/listar"; // FIX: Redireciona para listar
     }
 
     // EDITAR
@@ -54,6 +53,6 @@ public class RecomendacaoSaudeViewController {
     @GetMapping("/deletar/{id}")
     public String deletar(@PathVariable Long id, Locale locale) {
         service.deletar(id, locale);
-        return "redirect:/recomendacoes/saude";
+        return "redirect:/recomendacoes/saude/listar"; // FIX: Redireciona para listar
     }
 }

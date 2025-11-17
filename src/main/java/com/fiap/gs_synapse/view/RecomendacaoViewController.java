@@ -17,18 +17,18 @@ public class RecomendacaoViewController {
     }
 
     // LISTAR RECOMENDAÇÕES
-    @GetMapping
+    @GetMapping("/listar") // FIX: Mapeado para /recomendacoes/listar
     public String listar(Model model) {
-        model.addAttribute("recomendacoes", service.listarTodos()); // método que retorna lista completa
+        model.addAttribute("recomendacoes", service.listarTodos());
         model.addAttribute("recomendacaoDTO", new RecomendacaoDTO());
-        return "recomendacao"; // templates/recomendacoes.html
+        return "recomendacao";
     }
 
     // SALVAR NOVA RECOMENDAÇÃO
     @PostMapping("/salvar")
     public String salvar(@ModelAttribute RecomendacaoDTO dto) {
         service.salvar(dto);
-        return "redirect:/recomendacoes";
+        return "redirect:/recomendacoes/listar"; // FIX: Redireciona para listar
     }
 
     // EDITAR RECOMENDAÇÃO
@@ -36,19 +36,19 @@ public class RecomendacaoViewController {
     public String editar(@PathVariable Long id, Model model) {
         RecomendacaoDTO dto = service.buscarPorId(id);
         model.addAttribute("recomendacaoDTO", dto);
-        return "editar-recomendacao"; // templates/editar-recomendacoes.html
+        return "editar-recomendacao";
     }
 
     @PostMapping("/atualizar/{id}")
     public String atualizar(@PathVariable Long id, @ModelAttribute RecomendacaoDTO dto) {
         service.atualizar(id, dto);
-        return "redirect:/recomendacoes";
+        return "redirect:/recomendacoes/listar"; // FIX: Redireciona para listar
     }
 
     // DELETAR RECOMENDAÇÃO
     @GetMapping("/deletar/{id}")
     public String deletar(@PathVariable Long id) {
         service.deletar(id);
-        return "redirect:/recomendacoes";
+        return "redirect:/recomendacoes/listar"; // FIX: Redireciona para listar
     }
 }

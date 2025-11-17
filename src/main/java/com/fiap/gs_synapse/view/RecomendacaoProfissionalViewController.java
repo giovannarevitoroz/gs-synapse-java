@@ -19,7 +19,7 @@ public class RecomendacaoProfissionalViewController {
     }
 
     // LISTAR TODAS
-    @GetMapping
+    @GetMapping("/listar") // FIX: Mapeado para /recomendacoes/profissionais/listar
     public String listarTodas(Model model) {
         List<RecomendacaoProfissionalDTO> recomendacoes = service.listarTodos();
         model.addAttribute("recomendacoes", recomendacoes);
@@ -31,7 +31,7 @@ public class RecomendacaoProfissionalViewController {
     @PostMapping("/salvar")
     public String salvar(@ModelAttribute("recomendacaoProfissionalDTO") RecomendacaoProfissionalDTO dto) {
         service.salvar(dto);
-        return "redirect:/recomendacoes/profissionais";
+        return "redirect:/recomendacoes/profissionais/listar"; // FIX: Redireciona para listar
     }
 
     // EDITAR
@@ -48,6 +48,6 @@ public class RecomendacaoProfissionalViewController {
     @GetMapping("/deletar/{id}")
     public String deletar(@PathVariable Long id) {
         service.deletar(id);
-        return "redirect:/recomendacoes/profissionais";
+        return "redirect:/recomendacoes/profissionais/listar"; // FIX: Redireciona para listar
     }
 }
