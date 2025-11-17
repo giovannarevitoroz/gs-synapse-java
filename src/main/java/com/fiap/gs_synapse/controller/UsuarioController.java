@@ -28,7 +28,7 @@ public class UsuarioController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @GetMapping
+    @GetMapping("/api-list") // FIX: Mapeamento de listagem da API movido para /usuarios/api-list
     public ResponseEntity<Page<Usuario>> listar(Pageable pageable) {
         return ResponseEntity.ok(service.listar(pageable));
     }
