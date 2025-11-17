@@ -24,7 +24,7 @@ public class RecomendacaoProfissionalController {
     }
 
     // --------------------------------------
-    // LISTAR TODOS (SEM PAGINAÇÃO)
+    // LISTAR TODOS
     // --------------------------------------
     @GetMapping
     public ResponseEntity<List<RecomendacaoProfissionalDTO>> listarTodos() {
