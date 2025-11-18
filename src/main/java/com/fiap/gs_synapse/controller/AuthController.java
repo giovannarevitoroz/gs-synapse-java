@@ -29,14 +29,18 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody UsuarioDTO dto) throws Exception {
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(dto.getNomeUsuario(), dto.getSenhaUsuario())
+                    new UsernamePasswordAuthenticationToken(
+                            dto.getNomeUsuario(),
+                            dto.getSenhaUsuario()
+                    )
             );
         } catch (Exception e) {
-            return ResponseEntity.status(401).body(Map.of("error", "Usuário ou senha inválidos"));
+            return ResponseEntity.status(401)
+                    .body(Map.of("error", "Usuário ou senha inválidos"));
         }
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(dto.getNomeUsuario());
-        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(dto.getNomeUsuario());
+        String jwt = jwtUtil.generateToken(userDetails.getUsername());
 
         return ResponseEntity.ok(Map.of("jwt", jwt));
     }
