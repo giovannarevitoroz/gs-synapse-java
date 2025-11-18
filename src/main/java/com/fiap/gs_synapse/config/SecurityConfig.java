@@ -12,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.filter.ForwardedHeaderFilter; // <-- IMPORTAÇÃO NECESSÁRIA
 
 @Configuration
 @EnableWebSecurity
@@ -20,6 +21,18 @@ public class SecurityConfig {
 
     @Autowired
     private JwtRequestFilter jwtFilter;
+
+    /**
+     * Adiciona o filtro para lidar com headers de proxy reverso (como X-Forwarded-Proto,
+     * usado pelo Render, Load Balancers e outros proxies).
+     * Isso é essencial para evitar o loop de redirecionamento (ERR_TOO_MANY_REDIRECTS)
+     * em ambientes HTTPS, pois o filtro garante que o Spring confie no header
+     * para saber que a requisição original já era HTTPS.
+     */
+    @Bean
+    public ForwardedHeaderFilter forwardedHeaderFilter() {
+        return new ForwardedHeaderFilter();
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
