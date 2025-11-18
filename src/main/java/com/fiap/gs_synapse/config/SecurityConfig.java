@@ -38,26 +38,20 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable());
 
         http.authorizeHttpRequests(auth -> auth
-                // Home e páginas públicas
+                // páginas públicas
                 .requestMatchers("/", "/home").permitAll()
+                .requestMatchers("/login", "/auth/login", "/auth/register").permitAll()
 
-                // Login MVC e registro
-                .requestMatchers("/login", "/auth/register").permitAll()
-
-                // API de login JWT
-                .requestMatchers("/auth/login").permitAll()
-
-                // Arquivos estáticos
+                // estáticos
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
 
-                // Somente admin
+                // admin
                 .requestMatchers("/usuarios/**").hasRole("ADMIN")
 
-                // Resto precisa de autenticação
+                // demais
                 .anyRequest().authenticated()
         );
 
-        // Login via formulário (para Thymeleaf)
         http.formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
@@ -65,19 +59,18 @@ public class SecurityConfig {
                 .permitAll()
         );
 
-        // Logout
         http.logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
         );
 
-        // Sessão normal para MVC
-        http.sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+        // MVC usa sessão
+        http.sessionManagement(sm ->
+                sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
         );
 
-        // JWT somente em APIs (/api/** por exemplo)
+        // API usa JWT
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
