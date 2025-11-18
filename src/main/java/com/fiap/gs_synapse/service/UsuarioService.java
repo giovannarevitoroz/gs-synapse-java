@@ -13,6 +13,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -34,17 +35,21 @@ public class UsuarioService {
     @Autowired
     private MessageSource messageSource;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder; // <-- AGORA EXISTE
+
     @CacheEvict(value = "usuarios", allEntries = true)
     public Usuario criarUsuario(UsuarioDTO dto, Locale locale) {
 
         Usuario usuario = new Usuario();
 
         usuario.setNomeUsuario(dto.getNomeUsuario());
-        usuario.setSenhaUsuario(dto.getSenhaUsuario());
+        usuario.setSenhaUsuario(passwordEncoder.encode(dto.getSenhaUsuario())); // <-- AGORA ESTÁ CRIPTOGRAFADA
         usuario.setAreaAtual(dto.getAreaAtual());
         usuario.setAreaInteresse(dto.getAreaInteresse());
         usuario.setObjetivoCarreira(dto.getObjetivoCarreira());
         usuario.setNivelExperiencia(dto.getNivelExperiencia());
+        usuario.setRole(dto.getRole()); // <-- SALVA ROLE
 
         Set<Competencia> competencias = new HashSet<>();
         if (dto.getCompetenciasIds() != null) {
@@ -52,11 +57,11 @@ public class UsuarioService {
                     competenciaRepository.findById(id).ifPresent(competencias::add)
             );
         }
+
         usuario.setCompetencias(competencias);
 
         Usuario salvo = usuarioRepository.save(usuario);
 
-        // Envia mensagem assíncrona RabbitMQ
         rabbitTemplate.convertAndSend("emailQueue",
                 "Novo usuário criado: " + salvo.getNomeUsuario());
 
@@ -83,20 +88,26 @@ public class UsuarioService {
         Usuario usuario = buscarPorId(id, locale);
 
         usuario.setNomeUsuario(dto.getNomeUsuario());
-        usuario.setSenhaUsuario(dto.getSenhaUsuario());
+
+        // Se a senha foi enviada, criptografa novamente
+        if (dto.getSenhaUsuario() != null && !dto.getSenhaUsuario().isBlank()) {
+            usuario.setSenhaUsuario(passwordEncoder.encode(dto.getSenhaUsuario()));
+        }
+
         usuario.setAreaAtual(dto.getAreaAtual());
         usuario.setAreaInteresse(dto.getAreaInteresse());
         usuario.setObjetivoCarreira(dto.getObjetivoCarreira());
         usuario.setNivelExperiencia(dto.getNivelExperiencia());
+        usuario.setRole(dto.getRole());
 
         Set<Competencia> novas = new HashSet<>();
         if (dto.getCompetenciasIds() != null) {
             dto.getCompetenciasIds().forEach(cid ->
                     competenciaRepository.findById(cid).ifPresent(novas::add));
         }
+
         usuario.setCompetencias(novas);
 
-        // Mensagem assíncrona
         rabbitTemplate.convertAndSend("emailQueue",
                 "Usuário atualizado: " + usuario.getNomeUsuario());
 
@@ -110,7 +121,6 @@ public class UsuarioService {
 
         usuarioRepository.delete(usuario);
 
-        // Mensagem assíncrona no Rabbit
         rabbitTemplate.convertAndSend("emailQueue",
                 "Usuário deletado: " + usuario.getNomeUsuario());
     }

@@ -27,18 +27,16 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @GetMapping("/api-list") // FIX: Mapeamento de listagem da API movido para /usuarios/api-list
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @GetMapping("/api-list")
     public ResponseEntity<Page<Usuario>> listar(Pageable pageable) {
         return ResponseEntity.ok(service.listar(pageable));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> buscar(@PathVariable Long id) {
-        return ResponseEntity.ok(
-                service.buscarPorId(id, LocaleContextHolder.getLocale())
-        );
+        return ResponseEntity.ok(service.buscarPorId(id, LocaleContextHolder.getLocale()));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
