@@ -39,6 +39,10 @@ public class Usuario {
     @Column(nullable = false)
     private String nivelExperiencia;
 
+    @NotBlank
+    @Column(nullable = false)
+    private String role; // <-- O QUE FALTAVA!!
+
     @ManyToMany
     @JoinTable(
             name = "usuario_competencia",
@@ -48,7 +52,6 @@ public class Usuario {
     private Set<Competencia> competencias;
 
     // getters e setters
-
     public Long getIdUsuario() {
         return idUsuario;
     }
@@ -57,52 +60,60 @@ public class Usuario {
         this.idUsuario = idUsuario;
     }
 
-    public @NotBlank @Size(max = 100) String getNomeUsuario() {
+    public String getNomeUsuario() {
         return nomeUsuario;
     }
 
-    public void setNomeUsuario(@NotBlank @Size(max = 100) String nomeUsuario) {
+    public void setNomeUsuario(String nomeUsuario) {
         this.nomeUsuario = nomeUsuario;
     }
 
-    public @NotBlank @Size(max = 255) String getSenhaUsuario() {
+    public String getSenhaUsuario() {
         return senhaUsuario;
     }
 
-    public void setSenhaUsuario(@NotBlank @Size(max = 255) String senhaUsuario) {
+    public void setSenhaUsuario(String senhaUsuario) {
         this.senhaUsuario = senhaUsuario;
     }
 
-    public @NotBlank String getAreaAtual() {
+    public String getAreaAtual() {
         return areaAtual;
     }
 
-    public void setAreaAtual(@NotBlank String areaAtual) {
+    public void setAreaAtual(String areaAtual) {
         this.areaAtual = areaAtual;
     }
 
-    public @NotBlank String getAreaInteresse() {
+    public String getAreaInteresse() {
         return areaInteresse;
     }
 
-    public void setAreaInteresse(@NotBlank String areaInteresse) {
+    public void setAreaInteresse(String areaInteresse) {
         this.areaInteresse = areaInteresse;
     }
 
-    public @NotBlank String getObjetivoCarreira() {
+    public String getObjetivoCarreira() {
         return objetivoCarreira;
     }
 
-    public void setObjetivoCarreira(@NotBlank String objetivoCarreira) {
+    public void setObjetivoCarreira(String objetivoCarreira) {
         this.objetivoCarreira = objetivoCarreira;
     }
 
-    public @NotBlank String getNivelExperiencia() {
+    public String getNivelExperiencia() {
         return nivelExperiencia;
     }
 
-    public void setNivelExperiencia(@NotBlank String nivelExperiencia) {
+    public void setNivelExperiencia(String nivelExperiencia) {
         this.nivelExperiencia = nivelExperiencia;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public Set<Competencia> getCompetencias() {

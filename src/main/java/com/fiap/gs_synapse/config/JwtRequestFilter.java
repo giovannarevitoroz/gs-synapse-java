@@ -29,17 +29,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String path = request.getServletPath();
 
-        return
-                path.equals("/") ||
-                        path.equals("/home") ||
-                        path.equals("/login") ||
-                        path.equals("/auth/login") ||
-                        path.equals("/auth/register") ||
-                        path.startsWith("/css/") ||
-                        path.startsWith("/js/") ||
-                        path.startsWith("/images/") ||
-                        path.startsWith("/webjars/");
+        return path.equals("/") ||
+                path.equals("/home") ||
+                path.equals("/login") ||
+                path.equals("/auth/login") ||
+                path.equals("/auth/register") ||
+                path.startsWith("/css/") ||
+                path.startsWith("/js/") ||
+                path.startsWith("/images/") ||
+                path.startsWith("/webjars/");
     }
+
 
     @Override
     protected void doFilterInternal(

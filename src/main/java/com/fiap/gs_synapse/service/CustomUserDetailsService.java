@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -20,11 +21,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         Usuario usuario = usuarioRepository.findByNomeUsuario(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
-        // Aqui você pode mapear roles se tiver campo de perfil/role
         return new org.springframework.security.core.userdetails.User(
                 usuario.getNomeUsuario(),
                 usuario.getSenhaUsuario(),
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")) // default
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + usuario.getRole()))
         );
     }
 }

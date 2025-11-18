@@ -38,24 +38,18 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable());
 
         http.authorizeHttpRequests(auth -> auth
-                // páginas públicas
                 .requestMatchers("/", "/home").permitAll()
                 .requestMatchers("/login", "/auth/login", "/auth/register").permitAll()
-
-                // estáticos
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-
-                // admin
+                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                 .requestMatchers("/usuarios/**").hasRole("ADMIN")
-
-                // demais
                 .anyRequest().authenticated()
         );
 
         http.formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/", true)
+                .defaultSuccessUrl("/home", true)
+                .failureUrl("/login?error=true")
                 .permitAll()
         );
 
@@ -65,14 +59,13 @@ public class SecurityConfig {
                 .permitAll()
         );
 
-        // MVC usa sessão
         http.sessionManagement(sm ->
                 sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
         );
 
-        // API usa JWT
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 }
+
