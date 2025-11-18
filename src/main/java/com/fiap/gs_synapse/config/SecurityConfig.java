@@ -1,6 +1,5 @@
 package com.fiap.gs_synapse.config;
 
-import com.fiap.gs_synapse.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,11 +20,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Autowired
-    private JwtRequestFilter jwtRequestFilter;
+    private JwtRequestFilter jwtFilter;
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
     @Bean
@@ -36,41 +35,50 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http
-                .csrf(csrf -> csrf.disable())
+        http.csrf(csrf -> csrf.disable());
 
-                // =============== ROTAS LIBERADAS =====================
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/home").permitAll()
-                        .requestMatchers("/login", "/auth/login", "/auth/register").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                        .requestMatchers("/usuarios/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
-                )
+        http.authorizeHttpRequests(auth -> auth
+                // Home e páginas públicas
+                .requestMatchers("/", "/home").permitAll()
 
-                // =============== FORM LOGIN PARA THYMELEAF =====================
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/", true)
-                        .permitAll()
-                )
+                // Login MVC e registro
+                .requestMatchers("/login", "/auth/register").permitAll()
 
-                // =============== LOGOUT =====================
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                        .permitAll()
-                )
+                // API de login JWT
+                .requestMatchers("/auth/login").permitAll()
 
-                // =============== SESSÃO NORMAL PARA MVC ================
-                // SESSÃO NÃO PODE SER STATELESS!
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                );
+                // Arquivos estáticos
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
 
-        // =============== JWT EM ROTAS DE API =====================
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                // Somente admin
+                .requestMatchers("/usuarios/**").hasRole("ADMIN")
+
+                // Resto precisa de autenticação
+                .anyRequest().authenticated()
+        );
+
+        // Login via formulário (para Thymeleaf)
+        http.formLogin(form -> form
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/", true)
+                .permitAll()
+        );
+
+        // Logout
+        http.logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
+                .permitAll()
+        );
+
+        // Sessão normal para MVC
+        http.sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+        );
+
+        // JWT somente em APIs (/api/** por exemplo)
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
