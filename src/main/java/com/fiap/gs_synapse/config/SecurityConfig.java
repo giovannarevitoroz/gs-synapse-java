@@ -12,7 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.filter.ForwardedHeaderFilter; // <-- IMPORTAÇÃO NECESSÁRIA
+import org.springframework.web.filter.ForwardedHeaderFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -23,11 +23,7 @@ public class SecurityConfig {
     private JwtRequestFilter jwtFilter;
 
     /**
-     * Adiciona o filtro para lidar com headers de proxy reverso (como X-Forwarded-Proto,
-     * usado pelo Render, Load Balancers e outros proxies).
-     * Isso é essencial para evitar o loop de redirecionamento (ERR_TOO_MANY_REDIRECTS)
-     * em ambientes HTTPS, pois o filtro garante que o Spring confie no header
-     * para saber que a requisição original já era HTTPS.
+     * Filtro necessário para proxies reversos (Render, Cloudflare etc).
      */
     @Bean
     public ForwardedHeaderFilter forwardedHeaderFilter() {
@@ -47,7 +43,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(csrf -> csrf.disable());
+        /**
+         * ❗ REMOVIDO:
+         * http.csrf(csrf -> csrf.disable());
+         *
+         * Agora o CSRF está ATIVADO (padrão do Spring Security),
+         * permitindo que o Thymeleaf receba o objeto _csrf e evitando
+         * o erro EL1007E (null no parâmetro _csrf).
+         */
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/login", "/auth/login", "/auth/register").permitAll()
@@ -59,8 +62,8 @@ public class SecurityConfig {
 
         http.formLogin(form -> form
                 .loginPage("/login")
-                .loginProcessingUrl("/login") // onde o formulário envia
-                .defaultSuccessUrl("/home", true) // redireciona ao logar
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/home", true)
                 .failureUrl("/login?error=true")
                 .permitAll()
         );
@@ -75,7 +78,7 @@ public class SecurityConfig {
                 sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
         );
 
-        // MANTER o filtro JWT, mas ele só atua em rotas REST
+        // Mantém o filtro JWT (atua apenas nas rotas REST, não no login HTML)
         http.addFilterBefore(jwtFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
