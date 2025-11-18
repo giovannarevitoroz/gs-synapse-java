@@ -23,7 +23,8 @@ public class SecurityConfig {
     private JwtRequestFilter jwtFilter;
 
     /**
-     * Filtro necessário para proxies reversos (Render, Cloudflare etc).
+     * Necessário para o Render (reverse proxy),
+     * garante que Spring reconheça X-Forwarded-Proto: https
      */
     @Bean
     public ForwardedHeaderFilter forwardedHeaderFilter() {
@@ -43,14 +44,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        /**
-         * ❗ REMOVIDO:
-         * http.csrf(csrf -> csrf.disable());
-         *
-         * Agora o CSRF está ATIVADO (padrão do Spring Security),
-         * permitindo que o Thymeleaf receba o objeto _csrf e evitando
-         * o erro EL1007E (null no parâmetro _csrf).
-         */
+        // NÃO usar requiresChannel() no Render — causa looping
+        // ForwardedHeaderFilter já resolve o esquema HTTPS
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/login", "/auth/login", "/auth/register").permitAll()
@@ -78,8 +73,10 @@ public class SecurityConfig {
                 sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
         );
 
-        // Mantém o filtro JWT (atua apenas nas rotas REST, não no login HTML)
-        http.addFilterBefore(jwtFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(
+                jwtFilter,
+                org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class
+        );
 
         return http.build();
     }
