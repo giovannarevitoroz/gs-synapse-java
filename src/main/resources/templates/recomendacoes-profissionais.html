@@ -3,60 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <title>Recomendações Profissionais</title>
-    <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
-<h1>Gerenciar Recomendações Profissionais</h1>
+<div th:replace="layout :: conteudo">
 
-<!-- FORMULÁRIO PARA CRIAR OU EDITAR -->
-<h2 th:text="${recomendacaoProfissionalDTO.idRecomendacao != null} ? 'Editar Recomendação Profissional' : 'Nova Recomendação Profissional'"></h2>
-<form th:action="@{/recomendacoes/profissionais/salvar}"
-      th:object="${recomendacaoProfissionalDTO}" method="post">
+    <h1>Gerenciar Recomendações Profissionais</h1>
 
-    <input type="hidden" th:field="*{idRecomendacao}"/>
+    <h2 th:text="${recomendacaoProfissionalDTO.idRecomendacao != null} ?
+                  'Editar Recomendação Profissional' :
+                  'Nova Recomendação Profissional'"></h2>
 
-    <label>ID da Recomendação:</label>
-    <input type="number" th:field="*{idRecomendacao}" required/><br/>
+    <form th:action="@{/recomendacoes/profissionais/salvar}"
+          th:object="${recomendacaoProfissionalDTO}" method="post">
 
-    <label>Categoria:</label>
-    <input type="text" th:field="*{categoriaRecomendacao}" required/><br/>
+        <input type="hidden" th:field="*{idRecomendacao}" />
 
-    <label>Área:</label>
-    <input type="text" th:field="*{areaRecomendacao}" required/><br/>
+        <label>Categoria:</label>
+        <input type="text" th:field="*{categoriaRecomendacao}" required>
 
-    <label>Fonte:</label>
-    <input type="text" th:field="*{fonteRecomendacao}" required/><br/>
+        <label>Área:</label>
+        <input type="text" th:field="*{areaRecomendacao}" required>
 
-    <button type="submit" th:text="${recomendacaoProfissionalDTO.idRecomendacao != null} ? 'Atualizar' : 'Salvar'"></button>
-</form>
+        <label>Fonte:</label>
+        <input type="text" th:field="*{fonteRecomendacao}" required>
 
-<hr/>
+        <button type="submit"
+                th:text="${recomendacaoProfissionalDTO.idRecomendacao != null} ? 'Atualizar' : 'Salvar'"></button>
+    </form>
 
-<!-- LISTA DE RECOMENDAÇÕES -->
-<h2>Recomendações Profissionais Existentes</h2>
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Categoria</th>
-        <th>Área</th>
-        <th>Fonte</th>
-        <th>Ações</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="rec : ${recomendacoes}">
-        <td th:text="${rec.idRecomendacao}"></td>
-        <td th:text="${rec.categoriaRecomendacao}"></td>
-        <td th:text="${rec.areaRecomendacao}"></td>
-        <td th:text="${rec.fonteRecomendacao}"></td>
-        <td>
-            <a th:href="@{/recomendacoes/profissionais/editar/{id}(id=${rec.idRecomendacao})}">Editar</a> |
-            <a th:href="@{/recomendacoes/profissionais/deletar/{id}(id=${rec.idRecomendacao})}"
-               onclick="return confirm('Deseja realmente deletar?');">Deletar</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+    <hr>
+
+    <h2>Recomendações Profissionais Existentes</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Categoria</th>
+            <th>Área</th>
+            <th>Fonte</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="rec : ${recomendacoes}">
+            <td th:text="${rec.idRecomendacao}"></td>
+            <td th:text="${rec.categoriaRecomendacao}"></td>
+            <td th:text="${rec.areaRecomendacao}"></td>
+            <td th:text="${rec.fonteRecomendacao}"></td>
+
+            <td>
+                <a th:href="@{/recomendacoes/profissionais/editar/{id}(id=${rec.idRecomendacao})}">Editar</a>
+                |
+                <a th:href="@{/recomendacoes/profissionais/deletar/{id}(id=${rec.idRecomendacao})}"
+                   onclick="return confirm('Deseja realmente deletar?');">Deletar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
 </body>
 </html>

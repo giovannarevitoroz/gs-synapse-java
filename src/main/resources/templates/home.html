@@ -2,10 +2,11 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>GS Synapse</title>
+    <title th:text="${tituloPagina}">GS Synapse</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <script defer th:src="@{/js/sidebar.js}"></script>
 </head>
+
 <body>
 
 <!-- ===================== SIDEBAR ===================== -->
@@ -30,10 +31,13 @@
 <!-- ===================== CONTEÚDO ===================== -->
 <main class="content">
     <div class="page-container">
+
+        <!-- Título configurado pelo controller -->
         <h1 th:text="${tituloPagina}">Título da Página</h1>
 
-        <!-- Conteúdo da página -->
-        <div th:insert="${conteudo}"></div>
+        <!-- Aqui entra o conteúdo específico de cada página -->
+        <div th:replace="${conteudo}"></div>
+
     </div>
 </main>
 

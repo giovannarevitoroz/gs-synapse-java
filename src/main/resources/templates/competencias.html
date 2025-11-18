@@ -1,75 +1,74 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Competências</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-</head>
+<body th:replace="layout :: layout(conteudo='competenciasPage')"></body>
 
-<body>
+<th:block th:fragment="competenciasPage">
 
-<main class="content">
-    <div class="page-container">
+    <div class="card">
+        <h2 th:text="${competencia.idCompetencia != null} ?
+                'Editar Competência' : 'Nova Competência'"></h2>
 
-        <h1>Gerenciar Competências</h1>
+        <form th:action="${competencia.idCompetencia != null} ?
+                @{'/competencias/atualizar/' + ${competencia.idCompetencia}} :
+                @{/competencias/salvar}"
+              th:object="${competencia}" method="post">
 
-        <!-- FORMULÁRIO EM CARD -->
-        <div class="card">
-            <h2 th:text="${competencia.idCompetencia != null} ? 'Editar Competência' : 'Nova Competência'"></h2>
+            <input type="hidden" th:field="*{idCompetencia}" />
 
-            <form th:action="${competencia.idCompetencia != null} ? @{'/competencias/atualizar/' + ${competencia.idCompetencia}} : @{/competencias/salvar}"
-                  th:object="${competencia}" method="post">
+            <label>Nome</label>
+            <input type="text" th:field="*{nomeCompetencia}" required>
 
-                <input type="hidden" th:field="*{idCompetencia}" />
+            <label>Categoria</label>
+            <input type="text" th:field="*{categoriaCompetencia}" required>
 
-                <label>Nome</label>
-                <input type="text" th:field="*{nomeCompetencia}" required>
+            <label>Descrição</label>
+            <textarea th:field="*{descricaoCompetencia}" rows="4" required></textarea>
 
-                <label>Categoria</label>
-                <input type="text" th:field="*{categoriaCompetencia}" required>
-
-                <label>Descrição</label>
-                <textarea th:field="*{descricaoCompetencia}" rows="4" required></textarea>
-
-                <button type="submit" th:text="${competencia.idCompetencia != null} ? 'Atualizar' : 'Salvar'"></button>
-            </form>
-        </div>
-
-        <br>
-
-        <!-- LISTA -->
-        <div class="card">
-            <h2>Competências Existentes</h2>
-
-            <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Categoria</th>
-                    <th>Descrição</th>
-                    <th>Ações</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                <tr th:each="comp : ${competencias}">
-                    <td th:text="${comp.idCompetencia}"></td>
-                    <td th:text="${comp.nomeCompetencia}"></td>
-                    <td th:text="${comp.categoriaCompetencia}"></td>
-                    <td th:text="${comp.descricaoCompetencia}"></td>
-                    <td>
-                        <a class="btn-link" th:href="@{/competencias/editar/{id}(id=${comp.idCompetencia})}">Editar</a>
-                        <a class="btn-danger" th:href="@{/competencias/deletar/{id}(id=${comp.idCompetencia})}"
-                           onclick="return confirm('Deseja realmente deletar esta competência?');">Deletar</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
+            <button type="submit"
+                    th:text="${competencia.idCompetencia != null} ? 'Atualizar' : 'Salvar'"></button>
+        </form>
     </div>
-</main>
 
-</body>
+    <br>
+
+    <div class="card">
+        <h2>Competências Existentes</h2>
+
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Categoria</th>
+                <th>Descrição</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="comp : ${competencias}">
+                <td th:text="${comp.idCompetencia}"></td>
+                <td th:text="${comp.nomeCompetencia}"></td>
+                <td th:text="${comp.categoriaCompetencia}"></td>
+                <td th:text="${comp.descricaoCompetencia}"></td>
+
+                <td>
+                    <a class="btn-link"
+                       th:href="@{/competencias/editar/{id}(id=${comp.idCompetencia})}">
+                        Editar
+                    </a>
+
+                    <a class="btn-danger"
+                       th:href="@{/competencias/deletar/{id}(id=${comp.idCompetencia})}"
+                       onclick="return confirm('Deseja realmente deletar esta competência?');">
+                        Deletar
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</th:block>
+
 </html>
