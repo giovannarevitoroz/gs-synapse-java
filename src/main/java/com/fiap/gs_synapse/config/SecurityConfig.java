@@ -12,7 +12,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -38,17 +37,17 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable());
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/home").permitAll()
                 .requestMatchers("/login", "/auth/login", "/auth/register").permitAll()
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/", "/home").authenticated()
                 .requestMatchers("/usuarios/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
         );
 
         http.formLogin(form -> form
                 .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/home", true)
+                .loginProcessingUrl("/login") // onde o formulário envia
+                .defaultSuccessUrl("/home", true) // redireciona ao logar
                 .failureUrl("/login?error=true")
                 .permitAll()
         );
@@ -63,9 +62,9 @@ public class SecurityConfig {
                 sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
         );
 
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        // MANTER o filtro JWT, mas ele só atua em rotas REST
+        http.addFilterBefore(jwtFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 }
-

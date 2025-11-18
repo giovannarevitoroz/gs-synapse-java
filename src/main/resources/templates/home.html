@@ -31,13 +31,8 @@
 <!-- ===================== CONTEÚDO ===================== -->
 <main class="content">
     <div class="page-container">
-
-        <!-- Título configurado pelo controller -->
         <h1 th:text="${tituloPagina}">Título da Página</h1>
-
-        <!-- Aqui entra o conteúdo específico de cada página -->
         <div th:replace="${conteudo}"></div>
-
     </div>
 </main>
 

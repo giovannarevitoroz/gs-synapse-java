@@ -7,7 +7,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -18,13 +17,19 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
         Usuario usuario = usuarioRepository.findByNomeUsuario(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+
+        // GARANTE O PREFIXO: ROLE_ADMIN
+        String role = usuario.getRole().startsWith("ROLE_")
+                ? usuario.getRole()
+                : "ROLE_" + usuario.getRole();
 
         return new org.springframework.security.core.userdetails.User(
                 usuario.getNomeUsuario(),
                 usuario.getSenhaUsuario(),
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + usuario.getRole()))
+                List.of(new SimpleGrantedAuthority(role))
         );
     }
 }
