@@ -44,9 +44,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        // NÃO usar requiresChannel() no Render — causa looping
-        // ForwardedHeaderFilter já resolve o esquema HTTPS
-
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/login", "/auth/login", "/auth/register").permitAll()
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
@@ -73,11 +70,7 @@ public class SecurityConfig {
                 sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
         );
 
-        http.addFilterBefore(
-                jwtFilter,
-                org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class
-        );
-
         return http.build();
     }
+
 }
