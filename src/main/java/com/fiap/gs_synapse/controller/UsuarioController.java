@@ -27,6 +27,12 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
     }
 
+    @PostMapping("/registrar")
+    public String registrar(@ModelAttribute UsuarioDTO usuarioDTO) {
+        service.criarUsuario(usuarioDTO, LocaleContextHolder.getLocale());
+        return "redirect:/login?created=true";
+    }
+
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/api-list")
     public ResponseEntity<Page<Usuario>> listar(Pageable pageable) {

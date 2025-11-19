@@ -124,4 +124,20 @@ public class UsuarioService {
         rabbitTemplate.convertAndSend("emailQueue",
                 "Usuário deletado: " + usuario.getNomeUsuario());
     }
+
+    public Usuario criarUsuarioPublico(UsuarioDTO dto, Locale locale) {
+
+        Usuario usuario = new Usuario();
+
+        usuario.setNomeUsuario(dto.getNomeUsuario());
+        usuario.setSenhaUsuario(passwordEncoder.encode(dto.getSenhaUsuario()));
+        usuario.setAreaAtual(dto.getAreaAtual());
+        usuario.setAreaInteresse(dto.getAreaInteresse());
+        usuario.setObjetivoCarreira(dto.getObjetivoCarreira());
+        usuario.setNivelExperiencia(dto.getNivelExperiencia());
+
+        usuario.setRole("ROLE_USER");
+
+        return usuarioRepository.save(usuario);
+    }
 }

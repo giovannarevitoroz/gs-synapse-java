@@ -27,39 +27,39 @@ public class UsuarioViewController {
         this.competenciaRepository = competenciaRepository;
     }
 
-    // LISTAR + FORM
-    // 🛠️ AJUSTADO: A rota de listagem agora é explicitamente /usuarios/listar (GET /usuarios/listar)
     @GetMapping("/listar")
     public String listar(Model model,
                          @RequestParam(defaultValue = "0") int page,
                          @RequestParam(defaultValue = "10") int size) {
+
         Page<Usuario> usuarios = usuarioService.listar(PageRequest.of(page, size));
+
         model.addAttribute("usuarios", usuarios);
         model.addAttribute("usuarioDTO", new UsuarioDTO());
         model.addAttribute("competencias", competenciaRepository.findAll());
         model.addAttribute("paginaAtual", page);
+
         return "usuario";
     }
 
-    // SALVAR (POST /usuarios/salvar)
     @PostMapping("/salvar")
     public String salvar(@ModelAttribute("usuarioDTO") UsuarioDTO dto, Locale locale) {
-        if (dto.getIdUsuario() == null) {  // Criar
+        if (dto.getIdUsuario() == null) {
             usuarioService.criarUsuario(dto, locale);
-        } else {                           // Atualizar
+        } else {
             usuarioService.atualizar(dto.getIdUsuario(), dto, locale);
         }
-        return "redirect:/usuarios/listar"; // Redireciona para a nova rota de listagem
+        return "redirect:/usuarios/listar";
     }
 
-    // EDITAR — CARREGA NO FORMULÁRIO (GET /usuarios/editar/{id})
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model, Locale locale) {
+
         Usuario usuario = usuarioService.buscarPorId(id, locale);
+
         UsuarioDTO dto = new UsuarioDTO();
         dto.setIdUsuario(usuario.getIdUsuario());
         dto.setNomeUsuario(usuario.getNomeUsuario());
-        dto.setSenhaUsuario(usuario.getSenhaUsuario());
         dto.setAreaAtual(usuario.getAreaAtual());
         dto.setAreaInteresse(usuario.getAreaInteresse());
         dto.setObjetivoCarreira(usuario.getObjetivoCarreira());
@@ -69,18 +69,20 @@ public class UsuarioViewController {
                         .map(Competencia::getIdCompetencia)
                         .collect(Collectors.toSet())
         );
+
         Page<Usuario> usuarios = usuarioService.listar(PageRequest.of(0, 10));
+
         model.addAttribute("usuarioDTO", dto);
         model.addAttribute("usuarios", usuarios);
         model.addAttribute("competencias", competenciaRepository.findAll());
         model.addAttribute("paginaAtual", 0);
+
         return "usuario";
     }
 
-    // DELETAR (GET /usuarios/deletar/{id})
     @GetMapping("/deletar/{id}")
     public String deletar(@PathVariable Long id, Locale locale) {
         usuarioService.deletar(id, locale);
-        return "redirect:/usuarios/listar"; // Redireciona para a nova rota de listagem
+        return "redirect:/usuarios/listar";
     }
 }

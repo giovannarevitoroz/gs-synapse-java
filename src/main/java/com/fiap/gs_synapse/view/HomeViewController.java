@@ -15,14 +15,12 @@ public class HomeViewController {
         return "home";
     }
 
-    // Tela de login
     @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("usuarioDTO", new UsuarioDTO());
         return "login";
     }
 
-    // Rotas para fácil navegação no menu
     @GetMapping("/")
     public String root() {
         return "redirect:/home";

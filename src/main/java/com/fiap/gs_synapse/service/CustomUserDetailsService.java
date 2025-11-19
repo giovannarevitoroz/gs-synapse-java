@@ -24,18 +24,16 @@ public class CustomUserDetailsService implements UserDetailsService {
         Usuario usuario = usuarioRepository.findByNomeUsuario(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
 
-        // GARANTE QUE O ROLE SEMPRE COMEÇA COM ROLE_
-        String role = usuario.getRole();
+        String role = usuario.getRole().toUpperCase();
         if (!role.startsWith("ROLE_")) {
             role = "ROLE_" + role;
         }
 
-        GrantedAuthority authority = new SimpleGrantedAuthority(role);
-
         return new User(
-                usuario.getNomeUsuario(),
+                usuario.getNomeUsuario(),         // username aqui = campo do input
                 usuario.getSenhaUsuario(),
-                Collections.singletonList(authority)
+                Collections.singletonList(new SimpleGrantedAuthority(role))
         );
     }
 }
+
