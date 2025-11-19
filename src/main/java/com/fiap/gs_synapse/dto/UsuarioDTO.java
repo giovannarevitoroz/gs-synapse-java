@@ -28,7 +28,7 @@ public class UsuarioDTO {
     private String nivelExperiencia;
 
     @NotBlank
-    private String role; // <-- AGORA EXISTE NO DTO
+    private String role;
 
     private Set<Long> competenciasIds;
 
