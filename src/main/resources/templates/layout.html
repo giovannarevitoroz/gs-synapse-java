@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title th:text="${tituloPagina}">GS Synapse</title>
@@ -21,7 +22,14 @@
     <nav class="sidebar-menu">
         <a th:href="@{/}" class="menu-item">Home</a>
         <a th:href="@{/competencias}" class="menu-item">Competências</a>
-        <a th:href="@{/usuarios}" class="menu-item">Usuários</a>
+
+        <!-- SOMENTE ADMIN CONSEGUE VER ESSE LINK -->
+        <a th:href="@{/usuarios}"
+           class="menu-item"
+           sec:authorize="hasRole('ADMIN')">
+            Usuários
+        </a>
+
         <a th:href="@{/recomendacoes}" class="menu-item">Recomendações</a>
         <a th:href="@{/recomendacoes/saude}" class="menu-item">Saúde</a>
         <a th:href="@{/recomendacoes/profissionais}" class="menu-item">Profissionais</a>
@@ -34,10 +42,8 @@
 <main class="content">
     <div class="page-container">
 
-        <!-- Título dinâmico -->
         <h1 th:text="${tituloPagina}">Título da Página</h1>
 
-        <!-- Onde os fragments serão inseridos -->
         <div th:replace="${conteudo}"></div>
 
     </div>
