@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <title>Recomendações</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script defer th:src="@{/js/script.js}"></script>
 </head>
 
 <body>
-<main class="content">
+<div th:replace="layout :: conteudo">
+
     <div class="page-container">
 
         <h1>Recomendações</h1>
@@ -16,6 +18,7 @@
             <h2>Nova Recomendação</h2>
 
             <form th:action="@{/recomendacoes/salvar}" th:object="${recomendacaoDTO}" method="post">
+
                 <label>Título</label>
                 <input type="text" th:field="*{tituloRecomendacao}" required>
 
@@ -29,7 +32,7 @@
                 <input type="date" th:field="*{dataRecomendacao}" required>
 
                 <label>ID Usuário</label>
-                <input type="number" th:field="*{usuarioId}" >
+                <input type="number" th:field="*{usuarioId}">
 
                 <button type="submit">Salvar</button>
             </form>
@@ -63,8 +66,11 @@
                     <td th:text="${rec.usuarioId}"></td>
 
                     <td>
-                        <a class="btn-link" th:href="@{/recomendacoes/editar/{id}(id=${rec.idRecomendacao})}">Editar</a>
-                        <a class="btn-danger" th:href="@{/recomendacoes/deletar/{id}(id=${rec.idRecomendacao})}"
+                        <a class="btn-link"
+                           th:href="@{/recomendacoes/editar/{id}(id=${rec.idRecomendacao})}">Editar</a>
+
+                        <a class="btn-danger"
+                           th:href="@{/recomendacoes/deletar/{id}(id=${rec.idRecomendacao})}"
                            onclick="return confirm('Deseja realmente deletar?')">Deletar</a>
                     </td>
                 </tr>
@@ -73,6 +79,6 @@
         </div>
 
     </div>
-</main>
+</div>
 </body>
 </html>

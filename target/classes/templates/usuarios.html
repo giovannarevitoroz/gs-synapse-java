@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Gerenciar Usuários</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script defer th:src="@{/js/script.js}"></script>
 </head>
 <body>
 
 <h1>Gerenciamento de Usuários</h1>
 
-<!-- Formulário -->
+<!-- FORMULÁRIO -->
 <h2 th:text="${usuarioDTO.idUsuario != null} ? 'Editar Usuário' : 'Novo Usuário'"></h2>
 
 <form th:action="@{/usuarios/salvar}" th:object="${usuarioDTO}" method="post">
@@ -50,7 +51,7 @@
 
 <hr/>
 
-<!-- Lista de usuários -->
+<!-- LISTA DE USUÁRIOS -->
 <h2>Usuários Registrados</h2>
 
 <table border="1">
@@ -65,6 +66,7 @@
         <th>Ações</th>
     </tr>
     </thead>
+
     <tbody>
     <tr th:each="u : ${usuarios}">
         <td th:text="${u.idUsuario}"></td>
@@ -72,6 +74,7 @@
         <td th:text="${u.areaAtual}"></td>
         <td th:text="${u.areaInteresse}"></td>
         <td th:text="${u.nivelExperiencia}"></td>
+
         <td>
             <span th:each="c : ${u.competencias}">
                 <span th:text="${c.nomeCompetencia}"></span><br/>

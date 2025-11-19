@@ -1,43 +1,4 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>GS Synapse</title>
-
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <script defer th:src="@{/js/sidebar.js}"></script>
-
-</head>
-<body>
-
-<!-- ===================== SIDEBAR ===================== -->
-<aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-        <span class="logo">SYN⚙PSE</span>
-        <button class="toggle-btn" id="toggle-btn">☰</button>
-    </div>
-
-    <nav class="sidebar-menu">
-        <a th:href="@{/}" class="menu-item">Home</a>
-        <a th:href="@{/competencias}" class="menu-item">Competências</a>
-        <a th:href="@{/usuarios}" class="menu-item">Usuários</a>
-        <a th:href="@{/recomendacoes}" class="menu-item">Recomendações</a>
-        <a th:href="@{/recomendacoes/saude}" class="menu-item">Saúde</a>
-        <a th:href="@{/recomendacoes/profissionais}" class="menu-item">Profissionais</a>
-        <a th:href="@{/bemestar}" class="menu-item">Bem-estar</a>
-        <a th:href="@{/logout}" class="menu-item logout">Sair</a>
-    </nav>
-</aside>
-
-<!-- ===================== CONTEÚDO ===================== -->
-<main class="content">
-    <div class="page-container">
-        <h1 th:text="${tituloPagina}">Título da Página</h1>
-
-        <!-- Conteúdo da página -->
-        <div th:insert="${conteudo}"></div>
-    </div>
-</main>
-
-</body>
+<body th:replace="layout :: layout(conteudo='fragments/home :: homeFragment')"></body>
 </html>
