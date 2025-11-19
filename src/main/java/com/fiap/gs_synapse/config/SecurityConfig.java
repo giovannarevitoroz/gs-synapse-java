@@ -19,12 +19,13 @@ import org.springframework.web.filter.ForwardedHeaderFilter;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private JwtRequestFilter jwtFilter;
+    // Se não estiver usando JWT, remova completamente o filtro
+    // @Autowired
+    // private JwtRequestFilter jwtFilter;
 
     /**
-     * Necessário para o Render (reverse proxy),
-     * garante que Spring reconheça X-Forwarded-Proto: https
+     * Necessário para ambientes como Render (proxy HTTPS)
+     * interpretarem X-Forwarded-Proto corretamente
      */
     @Bean
     public ForwardedHeaderFilter forwardedHeaderFilter() {
@@ -44,33 +45,49 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/auth/login", "/auth/register").permitAll()
-                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-                .requestMatchers("/", "/home").authenticated()
-                .requestMatchers("/usuarios/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
-        );
+        http
+                .csrf(csrf -> csrf.disable()) // Importante: evita 403 no Render
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/login",
+                                "/auth/login",
+                                "/auth/register"
+                        ).permitAll()
 
-        http.formLogin(form -> form
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/home", true)
-                .failureUrl("/login?error=true")
-                .permitAll()
-        );
+                        .requestMatchers(
+                                "/css/**",
+                                "/js/**",
+                                "/images/**"
+                        ).permitAll()
 
-        http.logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout")
-                .permitAll()
-        );
+                        .requestMatchers("/", "/home")
+                        .authenticated()
 
-        http.sessionManagement(sm ->
-                sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-        );
+                        // FUNCIONA porque no banco está: ROLE_ADMIN
+                        .requestMatchers("/usuarios/**")
+                        .hasRole("ADMIN") // isso verifica "ROLE_ADMIN"
+
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/home", true)
+                        .failureUrl("/login?error=true")
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll()
+                )
+                .sessionManagement(sm ->
+                        sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                );
+
+        // ❌ NÃO ADICIONAR FILTRO JWT POIS VOCÊ USA FORM LOGIN
+        // http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
 }

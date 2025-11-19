@@ -41,7 +41,7 @@ public class Usuario {
 
     @NotBlank
     @Column(nullable = false)
-    private String role; // <-- O QUE FALTAVA!!
+    private String role;
 
     @ManyToMany
     @JoinTable(

@@ -21,10 +21,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         Usuario usuario = usuarioRepository.findByNomeUsuario(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
-        // GARANTE O PREFIXO: ROLE_ADMIN
-        String role = usuario.getRole().startsWith("ROLE_")
-                ? usuario.getRole()
-                : "ROLE_" + usuario.getRole();
+        String role = usuario.getRole();
+
+        if (role == null || role.isBlank()) {
+            throw new UsernameNotFoundException("Usuário sem role configurado");
+        }
 
         return new org.springframework.security.core.userdetails.User(
                 usuario.getNomeUsuario(),
@@ -32,4 +33,5 @@ public class CustomUserDetailsService implements UserDetailsService {
                 List.of(new SimpleGrantedAuthority(role))
         );
     }
+
 }
