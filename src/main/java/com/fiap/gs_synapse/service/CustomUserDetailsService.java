@@ -1,4 +1,4 @@
-package com.fiap.gs_synapse.security;
+package com.fiap.gs_synapse.service;
 
 import com.fiap.gs_synapse.model.Usuario;
 import com.fiap.gs_synapse.repository.UsuarioRepository;
