@@ -1,4 +1,57 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-<body th:replace="layout :: layout(conteudo='fragments/home :: homeFragment')"></body>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${tituloPagina}">GS Synapse</title>
+
+    <!-- Estilos globais -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script defer th:src="@{/js/script.js}"></script>
+</head>
+
+<body>
+
+<!-- ===================== SIDEBAR ===================== -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <span class="logo">SYN⚙PSE</span>
+        <button class="toggle-btn" id="toggle-btn">☰</button>
+    </div>
+
+    <nav class="sidebar-menu">
+        <a th:href="@{/}" class="menu-item">Home</a>
+        <a th:href="@{/competencias}" class="menu-item">Competências</a>
+
+        <!-- SOMENTE ADMIN CONSEGUE VER ESSE LINK -->
+        <a th:href="@{/usuarios}"
+           class="menu-item"
+           sec:authorize="hasRole('ADMIN')">
+            Usuários
+        </a>
+
+        <a th:href="@{/recomendacoes}" class="menu-item">Recomendações</a>
+        <a th:href="@{/recomendacoes/saude}" class="menu-item">Saúde</a>
+        <a th:href="@{/recomendacoes/profissionais}" class="menu-item">Profissionais</a>
+        <a th:href="@{/bemestar}" class="menu-item">Bem-estar</a>
+
+        <!-- ✅ CORREÇÃO FINAL: Logout DEVE ser um formulário POST para ser seguro e funcionar corretamente com o Spring Security -->
+        <form th:action="@{/logout}" method="post" class="logout-form">
+            <button type="submit" class="menu-item logout-button">Sair</button>
+        </form>
+    </nav>
+</aside>
+
+<!-- ===================== CONTEÚDO ===================== -->
+<main class="content">
+    <div class="page-container">
+
+        <h1 th:text="${tituloPagina}">Título da Página</h1>
+
+        <div th:replace="${conteudo}"></div>
+
+    </div>
+</main>
+
+</body>
 </html>

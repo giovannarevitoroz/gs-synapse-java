@@ -17,7 +17,7 @@ public class HomeViewController {
 
     @GetMapping("/login")
     public String login(Model model) {
-        // Garante que o objeto usuarioDTO esteja sempre disponível para o formulário de cadastro no login.html
+        // Garante que o objeto usuarioDTO esteja sempre disponível para o formulário de cadastro no home.html
         if (!model.containsAttribute("usuarioDTO")) {
             model.addAttribute("usuarioDTO", new UsuarioDTO());
         }
