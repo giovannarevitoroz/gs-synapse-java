@@ -17,7 +17,11 @@ public class HomeViewController {
 
     @GetMapping("/login")
     public String login(Model model) {
-        model.addAttribute("usuarioDTO", new UsuarioDTO());
+        // Garante que o objeto usuarioDTO esteja sempre disponível para o formulário de cadastro no login.html
+        if (!model.containsAttribute("usuarioDTO")) {
+            model.addAttribute("usuarioDTO", new UsuarioDTO());
+        }
+        model.addAttribute("tituloPagina", "Login");
         return "login";
     }
 
@@ -52,7 +56,7 @@ public class HomeViewController {
     }
 
     @GetMapping("/bemestar")
-    public String bemEstar() {
+    public String bemestar() {
         return "redirect:/bemestar/listar";
     }
 }
