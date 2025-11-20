@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder; // Importação necessária
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -20,6 +22,15 @@ public class SecurityConfig {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
+    /**
+     * ✅ CORREÇÃO: Define o Bean PasswordEncoder (BCrypt) que estava faltando.
+     * Este bean é exigido pelo AuthenticationManager e pelo RegistroController.
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -29,7 +40,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         // 🔓 ROTAS PÚBLICAS
-                        .requestMatchers("/", "/login", "/logout", "/auth/**").permitAll()
+                        // Adicionando /registrar para permitir o POST de novos usuários
+                        .requestMatchers("/", "/login", "/logout", "/auth/**", "/registrar").permitAll()
 
                         // 🔓 APENAS CSS
                         .requestMatchers("/css/**").permitAll()
@@ -60,7 +72,7 @@ public class SecurityConfig {
         // 🔥 JWT FILTRO — só para /api e /auth
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
-        // Permite H2-console se você usar
+        // Permite H2-console (frameOptions)
         http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
 
         return http.build();
