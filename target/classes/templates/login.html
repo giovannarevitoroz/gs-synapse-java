@@ -18,8 +18,9 @@
         <div class="card login-card">
             <h2>Acessar Conta</h2>
 
+            <!-- CSRF token removido, pois o CSRF está desabilitado no SecurityConfig -->
             <form th:action="@{/login}" method="post">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> REMOVIDO -->
 
                 <label>Usuário</label>
                 <input type="text" name="username" required>
@@ -35,8 +36,9 @@
         <div class="card login-card">
             <h2>Criar Conta</h2>
 
+            <!-- CSRF token removido, pois o CSRF está desabilitado no SecurityConfig -->
             <form th:action="@{/usuarios}" th:object="${usuarioDTO}" method="post">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> REMOVIDO -->
 
                 <label>Nome de Usuário</label>
                 <input type="text" th:field="*{nomeUsuario}" required>
