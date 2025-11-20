@@ -31,22 +31,13 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // Permite acesso a páginas de login, registro e recursos estáticos
                         .requestMatchers("/login", "/registrar", "/css/**", "/js/**", "/images/**", "/webjars/**", "/h2-console/**").permitAll()
-
-                        // 🔥 CORREÇÃO: Exige que o usuário tenha o papel ROLE_ADMIN ou ROLE_USER para acessar as rotas protegidas (como /home, que é o defaultSuccessUrl)
-                        // Note que a rota "/usuarios" deve ser protegida separadamente se for apenas para ADMIN.
                         .requestMatchers("/home", "/", "/competencias", "/recomendacoes/**", "/bemestar").hasAnyRole("ADMIN", "USER")
-
-                        // Protege a rota /usuarios para que APENAS ADMIN possa acessar (exemplo de rota específica)
-                        .requestMatchers("/usuarios").hasRole("ADMIN")
-
-                        // Garante que todas as outras rotas (não listadas acima) exijam autenticação.
+                        .requestMatchers("/usuarios/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        // Nomes dos campos do formulário (corretos, baseados em login.html)
                         .usernameParameter("nomeUsuario")
                         .passwordParameter("senhaUsuario")
                         .defaultSuccessUrl("/home", true)
@@ -59,7 +50,7 @@ public class SecurityConfig {
                         .permitAll()
                 );
 
-        // Permite o acesso ao console do H2/PostgreSQL durante o desenvolvimento se necessário (para verificar os dados)
+        // Para permitir console H2
         http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
 
         return http.build();
