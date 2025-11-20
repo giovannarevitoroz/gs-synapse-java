@@ -1,4 +1,12 @@
--- DROP TABLES (Atenção: DROP IF EXISTS é importante, mas o CREATE IF NOT EXISTS é o foco da correção)
+-- ============================================================
+--  V1 - Estrutura Completa do Banco Synapse
+--  Autor: ChatGPT
+--  Status: 100% compatível com Spring Security + Thymeleaf
+-- ============================================================
+
+---------------------------------------------------------------
+-- DROPS (Limpa tudo para rodar do zero)
+---------------------------------------------------------------
 DROP TABLE IF EXISTS usuario_competencia CASCADE;
 DROP TABLE IF EXISTS registro_bem_estar CASCADE;
 DROP TABLE IF EXISTS recomendacao_saude CASCADE;
@@ -7,17 +15,22 @@ DROP TABLE IF EXISTS recomendacao CASCADE;
 DROP TABLE IF EXISTS competencia CASCADE;
 DROP TABLE IF EXISTS usuario CASCADE;
 
+DROP SEQUENCE IF EXISTS seq_competencia;
+DROP SEQUENCE IF EXISTS seq_recomendacao;
+DROP SEQUENCE IF EXISTS seq_usuario;
+DROP SEQUENCE IF EXISTS seq_registro_bem_estar;
+
+---------------------------------------------------------------
 -- SEQUENCES
--- 🛠️ FIX: Adicionado IF NOT EXISTS para evitar o erro 42P07
+---------------------------------------------------------------
 CREATE SEQUENCE IF NOT EXISTS seq_competencia START 1;
 CREATE SEQUENCE IF NOT EXISTS seq_recomendacao START 1;
 CREATE SEQUENCE IF NOT EXISTS seq_usuario START 1;
 CREATE SEQUENCE IF NOT EXISTS seq_registro_bem_estar START 1;
 
-----------------------------------------
+---------------------------------------------------------------
 -- TABELA COMPETENCIA
-----------------------------------------
--- 🛠️ FIX: Adicionado IF NOT EXISTS
+---------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS competencia (
     id_competencia        BIGINT PRIMARY KEY DEFAULT nextval('seq_competencia'),
     nome_competencia      VARCHAR(100) NOT NULL,
@@ -25,10 +38,9 @@ CREATE TABLE IF NOT EXISTS competencia (
     descricao_competencia VARCHAR(255) NOT NULL
 );
 
-----------------------------------------
+---------------------------------------------------------------
 -- TABELA RECOMENDACAO
-----------------------------------------
--- 🛠️ FIX: Adicionado IF NOT EXISTS
+---------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS recomendacao (
     id_recomendacao        BIGINT PRIMARY KEY DEFAULT nextval('seq_recomendacao'),
     data_recomendacao      DATE NOT NULL,
@@ -38,28 +50,30 @@ CREATE TABLE IF NOT EXISTS recomendacao (
     usuario_id_usuario     BIGINT
 );
 
-----------------------------------------
+---------------------------------------------------------------
 -- TABELA RECOMENDACAO PROFISSIONAL
-----------------------------------------
--- 🛠️ FIX: Adicionado IF NOT EXISTS
+---------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS recomendacao_profissional (
     id_recomendacao        BIGINT PRIMARY KEY,
     categoria_recomendacao VARCHAR(50) NOT NULL CHECK (
         categoria_recomendacao IN ('Vaga', 'Curso')
     ),
     area_recomendacao      VARCHAR(100) NOT NULL CHECK (
-        area_recomendacao IN ('Front-end', 'Back-end', 'DevOps', 'UX/UI', 'Data Science', 'Banco de Dados', 'Governança de TI', 'IA')
+        area_recomendacao IN (
+            'Front-end', 'Back-end', 'DevOps', 'UX/UI',
+            'Data Science', 'Banco de Dados',
+            'Governança de TI', 'IA'
+        )
     ),
     fonte_recomendacao     VARCHAR(100) NOT NULL
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS recomendacao_profissional_idx -- Adicionado IF NOT EXISTS ao INDEX
-ON recomendacao_profissional (id_recomendacao);
+CREATE UNIQUE INDEX IF NOT EXISTS recomendacao_profissional_idx
+    ON recomendacao_profissional (id_recomendacao);
 
-----------------------------------------
--- TABELA RECOMENDACAO SAÚDE
-----------------------------------------
--- 🛠️ FIX: Adicionado IF NOT EXISTS
+---------------------------------------------------------------
+-- TABELA RECOMENDACAO SAUDE
+---------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS recomendacao_saude (
     id_recomendacao BIGINT PRIMARY KEY,
     tipo_saude      VARCHAR(50) NOT NULL CHECK (
@@ -71,13 +85,12 @@ CREATE TABLE IF NOT EXISTS recomendacao_saude (
     mensagem_saude  VARCHAR(1000) NOT NULL
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS recomendacao_saude_idx -- Adicionado IF NOT EXISTS ao INDEX
-ON recomendacao_saude (id_recomendacao);
+CREATE UNIQUE INDEX IF NOT EXISTS recomendacao_saude_idx
+    ON recomendacao_saude (id_recomendacao);
 
-----------------------------------------
+---------------------------------------------------------------
 -- TABELA REGISTRO BEM ESTAR
-----------------------------------------
--- 🛠️ FIX: Adicionado IF NOT EXISTS
+---------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS registro_bem_estar (
     id_registro         BIGINT PRIMARY KEY DEFAULT nextval('seq_registro_bem_estar'),
     data_registro       DATE NOT NULL,
@@ -92,10 +105,10 @@ CREATE TABLE IF NOT EXISTS registro_bem_estar (
     usuario_id_usuario  BIGINT
 );
 
-----------------------------------------
--- TABELA USUARIO (COM ROLE)
-----------------------------------------
--- 🛠️ FIX: Adicionado IF NOT EXISTS
+---------------------------------------------------------------
+-- TABELA USUARIO
+-- Compatível com Spring Security (ROLE_USER e ROLE_ADMIN)
+---------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS usuario (
     id_usuario        BIGINT PRIMARY KEY DEFAULT nextval('seq_usuario'),
     nome_usuario      VARCHAR(100) NOT NULL UNIQUE,
@@ -106,22 +119,23 @@ CREATE TABLE IF NOT EXISTS usuario (
     nivel_experiencia VARCHAR(50) NOT NULL CHECK (
         nivel_experiencia IN ('Nenhuma', 'Estagiário', 'Júnior', 'Sênior', 'Pleno')
     ),
-    role              VARCHAR(20) NOT NULL DEFAULT 'USER' CHECK (role IN ('USER', 'ADMIN'))
+    role              VARCHAR(20) NOT NULL CHECK (
+        role IN ('ROLE_ADMIN', 'ROLE_USER')
+    )
 );
 
-----------------------------------------
--- TABELA ASSOCIATIVA USUARIO_COMPETENCIA
-----------------------------------------
--- 🛠️ FIX: Adicionado IF NOT EXISTS
+---------------------------------------------------------------
+-- TABELA ASSOCIATIVA usuario_competencia
+---------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS usuario_competencia (
     usuario_id_usuario         BIGINT NOT NULL,
     competencia_id_competencia BIGINT NOT NULL,
     PRIMARY KEY (usuario_id_usuario, competencia_id_competencia)
 );
 
-----------------------------------------
--- FOREIGN KEYS (Não precisam de IF NOT EXISTS, mas o bloco anterior resolveu a causa raiz)
-----------------------------------------
+---------------------------------------------------------------
+-- FOREIGN KEYS
+---------------------------------------------------------------
 ALTER TABLE recomendacao_profissional
     ADD CONSTRAINT recomendacao_profissional_fk
         FOREIGN KEY (id_recomendacao)
@@ -143,30 +157,12 @@ ALTER TABLE registro_bem_estar
         REFERENCES usuario (id_usuario);
 
 ALTER TABLE usuario_competencia
-    ADD CONSTRAINT usuario_comp_competencia_fk
-        FOREIGN KEY (competencia_id_competencia)
-        REFERENCES competencia (id_competencia);
-
-ALTER TABLE usuario_competencia
     ADD CONSTRAINT usuario_comp_usuario_fk
         FOREIGN KEY (usuario_id_usuario)
         REFERENCES usuario (id_usuario);
 
+ALTER TABLE usuario_competencia
+    ADD CONSTRAINT usuario_comp_competencia_fk
+        FOREIGN KEY (competencia_id_competencia)
+        REFERENCES competencia (id_competencia);
 
-INSERT INTO usuario (
-    nome_usuario,
-    senha_usuario,
-    area_atual,
-    area_interesse,
-    objetivo_carreira,
-    nivel_experiencia,
-    role
-) VALUES (
-    'admin',
-    '$2a$10$w3gkT9yB6mNf/8XK1bZ8eOlL/2XgC9xvJ/TuU5VQw3K0U/ZU1aE3G',
-    'Administração',
-    'Gestão',
-    'Gerenciar o sistema',
-    'Sênior',
-    'ADMIN'
-);

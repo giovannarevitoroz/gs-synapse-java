@@ -1,2 +1,0 @@
-ALTER TABLE usuario
-    ALTER COLUMN role DROP NOT NULL;
