@@ -1,3 +1,4 @@
+```text
 Synapse/
 ├── 📄 Dockerfile
 ├── 📁 src/main/java/com/fiap/gs_synapse/
@@ -82,3 +83,4 @@ Synapse/
 │       └── 📁 usuarios/
 │           └── usuarios.html
 └── 📄 pom.xml
+```
