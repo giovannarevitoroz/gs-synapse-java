@@ -33,7 +33,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UsuarioDTO dto) {
         try {
-            // Tenta autenticar o usuário com Spring Security
+            // Autentica o usuário com Spring Security
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             dto.getNomeUsuario(),
@@ -41,18 +41,17 @@ public class AuthController {
                     )
             );
         } catch (BadCredentialsException e) {
-            // Senha ou usuário inválido
             return ResponseEntity.status(401)
                     .body(Map.of("error", "Usuário ou senha inválidos"));
         }
 
-        // Carrega os detalhes do usuário
+        // Carrega detalhes do usuário
         UserDetails userDetails = userDetailsService.loadUserByUsername(dto.getNomeUsuario());
 
         // Gera JWT
         String jwt = jwtUtil.generateToken(userDetails.getUsername());
 
-        // Retorna token
+        // Retorna token + username
         return ResponseEntity.ok(Map.of(
                 "jwt", jwt,
                 "username", userDetails.getUsername()
