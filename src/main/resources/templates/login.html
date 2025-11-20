@@ -34,8 +34,8 @@
         <div class="card login-card">
             <h2>Criar Conta</h2>
 
-            <!-- CSRF token removido, pois o CSRF está desabilitado no SecurityConfig -->
-            <form th:action="@{/usuarios}" th:object="${usuarioDTO}" method="post">
+            <!-- CORREÇÃO AQUI: Mudança para /registrar, que é a rota pública. -->
+            <form th:action="@{/registrar}" th:object="${usuarioDTO}" method="post">
                 <!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> REMOVIDO -->
 
                 <label>Nome de Usuário</label>
