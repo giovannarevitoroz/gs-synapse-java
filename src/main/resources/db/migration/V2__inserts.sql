@@ -1,33 +1,35 @@
----------------------------------------------------------------
--- INSERTS PADRÃO (Senha = 123456)
----------------------------------------------------------------
-
--- Hash BCrypt válido para "123456"
--- $2a$10$tJ92o1LgI4h0gq.Gk6z7E.2f/4k/121L9N0P5P9qP8/3mJ/6w2A3
-
 INSERT INTO usuario (
-    nome_usuario, senha_usuario, area_atual, area_interesse,
-    objetivo_carreira, nivel_experiencia, role
+    nome_usuario,
+    senha_usuario,
+    area_atual,
+    area_interesse,
+    objetivo_carreira,
+    nivel_experiencia,
+    role
 ) VALUES (
     'admin',
-    '$2a$10$uE.K131pW29zP5fV7XqYJ.I5Q70mX8eB3f4D6xY4J7C9N2R1S0H02',
-    'Administração',
-    'Gestão',
-    'Gerenciar o sistema',
-    'Sênior',
+    '$2a$10$4Yh8U2N3FJ7NfQW5ASzpuu0XgqIVq9C0t3G7zZCGfBl5soI3RFL/S', -- senha bcrypt
+    'Tecnologia da Informação',
+    'Segurança da Informação',
+    'Crescer profissionalmente na área de TI',
+    'Avançado',
     'ROLE_ADMIN'
 );
 
 INSERT INTO usuario (
-    nome_usuario, senha_usuario, area_atual, area_interesse,
-    objetivo_carreira, nivel_experiencia, role
+    nome_usuario,
+    senha_usuario,
+    area_atual,
+    area_interesse,
+    objetivo_carreira,
+    nivel_experiencia,
+    role
 ) VALUES (
-    'user',
-    '$2a$10$uE.K131pW29zP5fV7XqYJ.I5Q70mX8eB3f4D6xY4J7C9N2R1S0H02',
-    'Desenvolvimento',
-    'IA',
-    'Aprender novas tecnologias',
-    'Júnior',
+    'giovanna',
+    '$2a$10$flJgh9BzU5QKsGzOT8MYMuizc47u9oCGsUzJ6u0yv6PZL7v7eFhyu', -- senha Fiap@2025
+    'Tecnologia da Informação',
+    'Segurança da Informação',
+    'Crescer profissionalmente na área de TI',
+    'Avançado',
     'ROLE_USER'
 );
-
