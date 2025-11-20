@@ -2,6 +2,8 @@ package com.fiap.gs_synapse.service;
 
 import com.fiap.gs_synapse.model.Usuario;
 import com.fiap.gs_synapse.repository.UsuarioRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +17,8 @@ import java.util.Collections;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
+    private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
+
     @Autowired
     private UsuarioRepository usuarioRepository;
 
@@ -25,12 +29,15 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
 
         // Obtém e limpa o papel (ROLE) do usuário
-        String role = usuario.getRole().trim(); // 🔥 CORREÇÃO DEFENSIVA: remove espaços em branco
+        String role = usuario.getRole() != null ? usuario.getRole().trim() : "USER"; // padrão USER se null
 
-        // Adiciona "ROLE_" se necessário (embora o script SQL já inclua)
+        // Adiciona "ROLE_" se necessário
         if (!role.startsWith("ROLE_")) {
             role = "ROLE_" + role;
         }
+
+        // 🔹 LOG PARA DEBUG
+        logger.info("Usuário Autenticado: {} | Role Carregada: {}", usuario.getNomeUsuario(), role);
 
         // Retorna o objeto UserDetails com as informações do usuário e suas autoridades (papéis)
         return new User(

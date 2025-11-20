@@ -34,7 +34,11 @@
         <a th:href="@{/recomendacoes/saude}" class="menu-item">Saúde</a>
         <a th:href="@{/recomendacoes/profissionais}" class="menu-item">Profissionais</a>
         <a th:href="@{/bemestar}" class="menu-item">Bem-estar</a>
-        <a th:href="@{/logout}" class="menu-item logout">Sair</a>
+
+        <!-- ✅ CORREÇÃO FINAL: Logout DEVE ser um formulário POST para ser seguro e funcionar corretamente com o Spring Security -->
+        <form th:action="@{/logout}" method="post" class="logout-form">
+            <button type="submit" class="menu-item logout-button">Sair</button>
+        </form>
     </nav>
 </aside>
 
