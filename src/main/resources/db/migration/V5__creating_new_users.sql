@@ -14,7 +14,7 @@ INSERT INTO usuario (
     nivel_experiencia,
     role
 ) VALUES (
-    'admin',
+    'giovanna',
     '$2a$10$tJ92o1LgI4h0gq.Gk6z7E.2f/4k/121L9N0P5P9qP8/3mJ/6w2A3',
     'Administração',
     'Gestão',
