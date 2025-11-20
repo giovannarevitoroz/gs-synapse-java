@@ -8,7 +8,7 @@ INSERT INTO usuario (
     role
 ) VALUES (
     'admin',
-    '$2a$10$4Yh8U2N3FJ7NfQW5ASzpuu0XgqIVq9C0t3G7zZCGfBl5soI3RFL/S', -- senha bcrypt
+    '$2b$12$eDfMQ3W37ODC/Xdn4cYYgevZMjwxyBNQDOO86vkZNpU4bxGYOaOAa', -- senha bcrypt
     'Tecnologia da Informação',
     'Segurança da Informação',
     'Crescer profissionalmente na área de TI',
@@ -26,7 +26,7 @@ INSERT INTO usuario (
     role
 ) VALUES (
     'giovanna',
-    '$2a$10$flJgh9BzU5QKsGzOT8MYMuizc47u9oCGsUzJ6u0yv6PZL7v7eFhyu', -- senha Fiap@2025
+    '$2b$12$aXwCoqljl7xI5avDt/cHs.YCUavHn6pf9z.d4NQD/QoGSV.6f5Yt6', -- senha Fiap@2025
     'Tecnologia da Informação',
     'Segurança da Informação',
     'Crescer profissionalmente na área de TI',
