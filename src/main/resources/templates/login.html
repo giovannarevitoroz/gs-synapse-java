@@ -1,82 +1,83 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${tituloPagina} ?: 'Login'">Login</title>
+    <title th:text="${tituloPagina}">GS Synapse</title>
+
+    <!-- Estilos globais -->
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script defer th:src="@{/js/script.js}"></script>
 </head>
 
 <body>
 
-<div class="login-body">
-    <div class="login-container">
-        <h1>SYN⚙PSE - Seu Hub de Crescimento Profissional</h1>
+<!-- ===================== SIDEBAR ===================== -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <span class="logo">SYN⚙PSE</span>
+        <button class="toggle-btn" id="toggle-btn">☰</button>
+    </div>
 
-        <!-- Mensagens de erro/sucesso -->
-        <div th:if="${param.error}" class="message error-message">
-            Usuário ou senha inválidos. Tente novamente.
+    <nav class="sidebar-menu">
+        <a th:href="@{/}" class="menu-item">Home</a>
+        <a th:href="@{/competencias}" class="menu-item">Competências</a>
+
+        <!-- SOMENTE ADMIN CONSEGUE VER ESSE LINK -->
+        <a th:href="@{/usuarios}"
+           class="menu-item"
+           sec:authorize="hasRole('ADMIN')">
+            Usuários
+        </a>
+
+        <a th:href="@{/recomendacoes}" class="menu-item">Recomendações</a>
+        <a th:href="@{/recomendacoes/saude}" class="menu-item">Saúde</a>
+        <a th:href="@{/recomendacoes/profissionais}" class="menu-item">Profissionais</a>
+        <a th:href="@{/bemestar}" class="menu-item">Bem-estar</a>
+
+        <!-- Logout via POST -->
+        <form th:action="@{/logout}" method="post" class="logout-form">
+            <button type="submit" class="menu-item logout-button">Sair</button>
+        </form>
+    </nav>
+</aside>
+
+<!-- ===================== CONTEÚDO ===================== -->
+<main class="content">
+    <div class="page-container">
+
+        <h1 th:text="${tituloPagina}">Título da Página</h1>
+
+        <!-- ================= ALERTAS ================= -->
+        <div class="alerts">
+
+            <!-- Erro de login (Spring Security ?error) -->
+            <div th:if="${param.error}" class="alert alert-error">
+                Usuário ou senha incorretos!
+            </div>
+
+            <!-- Logout com sucesso (Spring Security ?logout) -->
+            <div th:if="${param.logout}" class="alert alert-success">
+                Logout realizado com sucesso.
+            </div>
+
+            <!-- Mensagem de sucesso customizada (ex: registro de usuário) -->
+            <div th:if="${mensagemSucesso}" class="alert alert-success">
+                <p th:text="${mensagemSucesso}"></p>
+            </div>
+
+            <!-- Mensagem de erro customizada (ex: falha ao registrar usuário) -->
+            <div th:if="${mensagemErro}" class="alert alert-error">
+                <p th:text="${mensagemErro}"></p>
+            </div>
+
         </div>
-        <div th:if="${param.logout}" class="message success-message">
-            Sessão encerrada com sucesso.
-        </div>
-        <div th:if="${mensagemSucesso}" class="message success-message">
-            <p th:text="${mensagemSucesso}"></p>
-            <p>Faça o login para continuar.</p>
-        </div>
-        <div th:if="${#fields.hasAnyErrors()}" class="message error-message">
-            <p>Por favor, corrija os erros no formulário de cadastro abaixo.</p>
-        </div>
 
-        <!-- LOGIN -->
-        <div class="card login-card">
-            <h2>Acessar Conta</h2>
-            <form th:action="@{/login}" method="post">
-                <label for="nomeUsuarioLogin">Usuário</label>
-                <input type="text" id="nomeUsuarioLogin" name="nomeUsuario" required placeholder="Seu nome de usuário">
-
-                <label for="senhaUsuarioLogin">Senha</label>
-                <input type="password" id="senhaUsuarioLogin" name="senhaUsuario" required placeholder="Sua senha">
-
-                <button type="submit" class="button primary-button">Entrar</button>
-            </form>
-        </div>
-
-        <!-- CADASTRO -->
-        <div class="card login-card">
-            <h2>Criar Nova Conta</h2>
-            <form th:action="@{/usuarios/registrar}" th:object="${usuarioDTO}" method="post">
-
-                <label for="nomeUsuarioReg">Nome de Usuário</label>
-                <input type="text" id="nomeUsuarioReg" th:field="*{nomeUsuario}" required placeholder="Nome de usuário único">
-                <p th:if="${#fields.hasErrors('nomeUsuario')}" th:errors="*{nomeUsuario}" class="validation-error"></p>
-
-                <label for="senhaUsuarioReg">Senha</label>
-                <input type="password" id="senhaUsuarioReg" th:field="*{senhaUsuario}" required placeholder="Mínimo de 6 caracteres">
-                <p th:if="${#fields.hasErrors('senhaUsuario')}" th:errors="*{senhaUsuario}" class="validation-error"></p>
-
-                <label for="areaAtual">Área Atual</label>
-                <input type="text" id="areaAtual" th:field="*{areaAtual}" required placeholder="Ex: Desenvolvimento Web">
-                <p th:if="${#fields.hasErrors('areaAtual')}" th:errors="*{areaAtual}" class="validation-error"></p>
-
-                <label for="areaInteresse">Área de Interesse</label>
-                <input type="text" id="areaInteresse" th:field="*{areaInteresse}" required placeholder="Ex: Inteligência Artificial">
-                <p th:if="${#fields.hasErrors('areaInteresse')}" th:errors="*{areaInteresse}" class="validation-error"></p>
-
-                <label for="objetivoCarreira">Objetivo de Carreira</label>
-                <input type="text" id="objetivoCarreira" th:field="*{objetivoCarreira}" required placeholder="Ex: Se tornar um gestor de projetos">
-                <p th:if="${#fields.hasErrors('objetivoCarreira')}" th:errors="*{objetivoCarreira}" class="validation-error"></p>
-
-                <label for="nivelExperiencia">Nível de Experiência</label>
-                <input type="text" id="nivelExperiencia" th:field="*{nivelExperiencia}" required placeholder="Ex: Pleno">
-                <p th:if="${#fields.hasErrors('nivelExperiencia')}" th:errors="*{nivelExperiencia}" class="validation-error"></p>
-
-                <button type="submit" class="button secondary-button">Cadastrar!</button>
-            </form>
-        </div>
+        <!-- Conteúdo dinâmico da página -->
+        <div th:replace="${conteudo}"></div>
 
     </div>
-</div>
+</main>
 
 </body>
 </html>
