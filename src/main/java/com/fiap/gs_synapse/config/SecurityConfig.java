@@ -31,15 +31,25 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/registrar", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                        // Permite acesso a páginas de login, registro e recursos estáticos
+                        .requestMatchers("/login", "/registrar", "/css/**", "/js/**", "/images/**", "/webjars/**", "/h2-console/**").permitAll()
+
+                        // 🔥 CORREÇÃO: Exige que o usuário tenha o papel ROLE_ADMIN ou ROLE_USER para acessar as rotas protegidas (como /home, que é o defaultSuccessUrl)
+                        // Note que a rota "/usuarios" deve ser protegida separadamente se for apenas para ADMIN.
+                        .requestMatchers("/home", "/", "/competencias", "/recomendacoes/**", "/bemestar").hasAnyRole("ADMIN", "USER")
+
+                        // Protege a rota /usuarios para que APENAS ADMIN possa acessar (exemplo de rota específica)
+                        .requestMatchers("/usuarios").hasRole("ADMIN")
+
+                        // Garante que todas as outras rotas (não listadas acima) exijam autenticação.
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        // 🔥 IMPORTANTE: Defina aqui os nomes que estão no seu DTO/HTML
+                        // Nomes dos campos do formulário (corretos, baseados em login.html)
                         .usernameParameter("nomeUsuario")
                         .passwordParameter("senhaUsuario")
-                        .defaultSuccessUrl("/home", true) // Força ir para home após sucesso
+                        .defaultSuccessUrl("/home", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
@@ -48,6 +58,9 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 );
+
+        // Permite o acesso ao console do H2/PostgreSQL durante o desenvolvimento se necessário (para verificar os dados)
+        http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
 
         return http.build();
     }

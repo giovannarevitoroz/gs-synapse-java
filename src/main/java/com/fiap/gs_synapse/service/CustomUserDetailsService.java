@@ -20,17 +20,21 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // Tenta carregar o usuário pelo nome de usuário
         Usuario usuario = usuarioRepository.findByNomeUsuario(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
 
-        // Ajuste ROLE: adiciona "ROLE_" somente se não existir
-        String role = usuario.getRole();
+        // Obtém e limpa o papel (ROLE) do usuário
+        String role = usuario.getRole().trim(); // 🔥 CORREÇÃO DEFENSIVA: remove espaços em branco
+
+        // Adiciona "ROLE_" se necessário (embora o script SQL já inclua)
         if (!role.startsWith("ROLE_")) {
             role = "ROLE_" + role;
         }
 
+        // Retorna o objeto UserDetails com as informações do usuário e suas autoridades (papéis)
         return new User(
-                usuario.getNomeUsuario(),       // username = nomeUsuario
+                usuario.getNomeUsuario(),       // username
                 usuario.getSenhaUsuario(),      // senha criptografada
                 Collections.singletonList(new SimpleGrantedAuthority(role))
         );

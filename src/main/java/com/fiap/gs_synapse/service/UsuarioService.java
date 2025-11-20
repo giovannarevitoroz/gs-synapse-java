@@ -125,6 +125,7 @@ public class UsuarioService {
                 "Usuário deletado: " + usuario.getNomeUsuario());
     }
 
+    @Cacheable("usuarios")
     public Usuario criarUsuarioPublico(UsuarioDTO dto, Locale locale) {
 
         Usuario usuario = new Usuario();
