@@ -18,20 +18,32 @@ import org.springframework.web.filter.ForwardedHeaderFilter;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    // ---------------- PASSWORD ENCODER ----------------
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // ---------------- AUTHENTICATION MANAGER ----------------
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
+
+    // ---------------- SECURITY FILTER CHAIN ----------------
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        // URLs públicas
                         .requestMatchers("/login", "/registrar", "/css/**", "/js/**", "/images/**").permitAll()
+                        // URLs apenas para ADMIN
                         .requestMatchers("/usuarios/**").hasRole("ADMIN")
+                        // Home/dashboard acessível apenas a usuários logados
                         .requestMatchers("/", "/home").authenticated()
+                        // Qualquer outra requisição requer autenticação
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -45,8 +57,18 @@ public class SecurityConfig {
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
+                )
+                // Deixa a sessão stateless se você for usar JWT
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 );
 
         return http.build();
+    }
+
+    // ---------------- OPTIONAL: Forwarded Header Filter ----------------
+    @Bean
+    public ForwardedHeaderFilter forwardedHeaderFilter() {
+        return new ForwardedHeaderFilter();
     }
 }
