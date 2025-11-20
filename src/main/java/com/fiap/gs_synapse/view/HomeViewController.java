@@ -1,6 +1,7 @@
 package com.fiap.gs_synapse.view;
 
-import com.fiap.gs_synapse.dto.UsuarioDTO;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,24 +12,40 @@ public class HomeViewController {
     @GetMapping("/home")
     public String home(Model model) {
         model.addAttribute("tituloPagina", "Dashboard");
+        // O fragmento deve ser incluído via Thymeleaf no layout principal
         model.addAttribute("conteudo", "fragments/home :: homeFragment");
         return "home";
     }
 
-    @GetMapping("/login")
-    public String login(Model model) {
-        // Garante que o objeto usuarioDTO esteja sempre disponível para o formulário de cadastro no home.html
-        if (!model.containsAttribute("usuarioDTO")) {
-            model.addAttribute("usuarioDTO", new UsuarioDTO());
-        }
-        model.addAttribute("tituloPagina", "Login");
-        return "login";
-    }
+    /**
+     * ❌ MÉTODO REMOVIDO: O mapeamento /login foi consolidado no LoginViewController para evitar conflitos.
+     */
+    // @GetMapping("/login")
+    // public String login(Model model) {
+    //     // ... lógica movida para LoginViewController
+    // }
 
+    /**
+     * CORREÇÃO: O path raiz (/) verifica se o usuário está autenticado
+     * para evitar o loop de redirecionamento / -> /home -> /login.
+     */
     @GetMapping("/")
     public String root() {
-        return "redirect:/home";
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        // Verifica se a autenticação existe e se o principal não é o 'anonymousUser' padrão
+        if (auth != null && auth.isAuthenticated() &&
+                !auth.getPrincipal().equals("anonymousUser")) {
+
+            // Usuário autenticado: ir para a home
+            return "redirect:/home";
+        } else {
+            // Usuário NÃO autenticado: ir direto para o login
+            return "redirect:/login";
+        }
     }
+
+    // Os outros métodos de redirecionamento permanecem iguais:
 
     @GetMapping("/competencias")
     public String competencias() {

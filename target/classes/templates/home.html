@@ -1,4 +1,39 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-<body th:replace="layout :: layout(conteudo='fragments/home :: homeFragment')"></body>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${tituloPagina}">GS Synapse</title>
+
+    <!-- Estilos globais -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<!-- ===================== MENU SUPERIOR ===================== -->
+<nav class="menu-top">
+    <a th:href="@{/}">Home</a>
+    <a th:href="@{/competencias}">Competências</a>
+    <a th:href="@{/recomendacoes}">Recomendações</a>
+    <a th:href="@{/recomendacoes/saude}">Saúde</a>
+    <a th:href="@{/recomendacoes/profissionais}">Profissionais</a>
+    <a th:href="@{/bemestar}">Bem-estar</a>
+
+    <!-- SOMENTE ADMIN VÊ ESTE LINK -->
+    <a th:href="@{/usuarios}" sec:authorize="hasRole('ADMIN')">Usuários</a>
+
+    <!-- Logout -->
+    <form th:action="@{/logout}" method="post" style="display:inline;">
+        <button type="submit">Sair</button>
+    </form>
+</nav>
+
+<!-- ===================== CONTEÚDO ===================== -->
+<main class="content">
+    <h1 th:text="${tituloPagina}">Título da Página</h1>
+    <div th:text="${conteudo}">Aqui vai o conteúdo da página.</div>
+</main>
+
+</body>
 </html>
