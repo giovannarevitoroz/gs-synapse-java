@@ -19,31 +19,52 @@ public class CompetenciaViewController {
     }
 
     // LISTAR COMPETÊNCIAS COM PAGINAÇÃO
-    @GetMapping("/listar")
+    @GetMapping({"/listar", "/"})
     public String listar(Model model,
                          @RequestParam(defaultValue = "0") int page,
                          @RequestParam(defaultValue = "10") int size) {
+
         Page<CompetenciaDTO> competenciasPage = service.listar(PageRequest.of(page, size));
-        model.addAttribute("competencias", competenciasPage.getContent()); // lista simples
+
+        model.addAttribute("competencias", competenciasPage.getContent());
         model.addAttribute("paginaAtual", competenciasPage.getNumber());
         model.addAttribute("totalPaginas", competenciasPage.getTotalPages());
-        model.addAttribute("competencia", new CompetenciaDTO()); // formulário vazio
-        return "competencias"; // usa o template unico competencias.html
+        model.addAttribute("competencia", new CompetenciaDTO()); // formulário vazio para criação
+
+        return "competencias"; // mesmo template para listar, criar e editar
     }
 
     // FORM PARA CRIAR (GET /competencias/novo)
     @GetMapping("/novo")
-    public String novo(Model model) {
-        model.addAttribute("competencia", new CompetenciaDTO());
-        return "competencias"; // mesmo template para criar
+    public String novo(Model model,
+                       @RequestParam(defaultValue = "0") int page,
+                       @RequestParam(defaultValue = "10") int size) {
+
+        Page<CompetenciaDTO> competenciasPage = service.listar(PageRequest.of(page, size));
+
+        model.addAttribute("competencias", competenciasPage.getContent());
+        model.addAttribute("paginaAtual", competenciasPage.getNumber());
+        model.addAttribute("totalPaginas", competenciasPage.getTotalPages());
+        model.addAttribute("competencia", new CompetenciaDTO()); // formulário vazio
+
+        return "competencias";
     }
 
     // FORM PARA EDITAR (GET /competencias/editar/{id})
     @GetMapping("/editar/{id}")
-    public String editar(@PathVariable Long id, Model model) {
+    public String editar(@PathVariable Long id, Model model,
+                         @RequestParam(defaultValue = "0") int page,
+                         @RequestParam(defaultValue = "10") int size) {
+
         CompetenciaDTO dto = service.buscarPorId(id);
-        model.addAttribute("competencia", dto);
-        return "competencias"; // mesmo template para editar
+        Page<CompetenciaDTO> competenciasPage = service.listar(PageRequest.of(page, size));
+
+        model.addAttribute("competencias", competenciasPage.getContent());
+        model.addAttribute("paginaAtual", competenciasPage.getNumber());
+        model.addAttribute("totalPaginas", competenciasPage.getTotalPages());
+        model.addAttribute("competencia", dto); // formulário preenchido para edição
+
+        return "competencias";
     }
 
     // SALVAR OU ATUALIZAR (POST /competencias/salvar)
