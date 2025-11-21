@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -24,21 +23,19 @@ public class SecurityConfig {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
-    // Resolve o problema de bean ausente (resolvido na etapa anterior)
+    // 🔓 SENHA EM TEXTO PLANO PARA TESTES
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        // ⚠️ Somente para testes! Não usar em produção.
+        return org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
     }
 
     /**
-     * ✅ CORREÇÃO: Define um HttpFirewall personalizado para permitir o ponto e vírgula (;)
-     * na URL, necessário para o jsessionid em alguns ambientes de servidor web (como o Tomcat).
-     * Isso resolve o erro 'The request was rejected because the URL contained a potentially malicious String ";"'
+     * 🔧 Permite ponto e vírgula (;) na URL para jsessionid
      */
     @Bean
     public HttpFirewall allowSemicolonHttpFirewall() {
         StrictHttpFirewall firewall = new StrictHttpFirewall();
-        // Permite o ponto e vírgula. Isso é necessário para URLs com jsessionid.
         firewall.setAllowSemicolon(true);
         return firewall;
     }
@@ -50,17 +47,13 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
 
                 .authorizeHttpRequests(auth -> auth
-
                         // 🔓 ROTAS PÚBLICAS
                         .requestMatchers("/", "/login", "/logout", "/auth/**", "/registrar").permitAll()
-
                         // 🔓 APENAS CSS
                         .requestMatchers("/css/**").permitAll()
-
                         // 🔒 ROTAS RESTRITAS
                         .requestMatchers("/home", "/competencias", "/recomendacoes/**", "/bemestar")
                         .hasAnyRole("ADMIN", "USER")
-
                         // 🔒 QUALQUER OUTRA EXIGE AUTENTICAÇÃO
                         .anyRequest().authenticated()
                 )
@@ -83,7 +76,7 @@ public class SecurityConfig {
         // 🔥 JWT FILTRO
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
-        // Permite frameOptions para H2-console (embora não relevante para este erro)
+        // Permite frameOptions para H2-console (opcional)
         http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
 
         return http.build();

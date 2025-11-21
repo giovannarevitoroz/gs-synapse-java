@@ -13,7 +13,7 @@ INSERT INTO usuario (
     role
 ) VALUES (
     'gioadmin',
-    '$2a$12$RuA2uKskkSHqu/v5LbyefOCcsm1D.WBygGKFU5xkhPL8XBIGCXOuO',
+    '12345',
     'Administração de Sistemas',
     'Segurança e Cloud',
     'Compliance e LGPD',
@@ -32,7 +32,7 @@ INSERT INTO usuario (
     role
 ) VALUES (
     'kaianuser',
-    '$2a$12$YNfFHj9mzt5L8Ovmssje0.XgyLbhOmlC4zQpAbJ.EAOcwGH82ErqO',
+    '123456',
     'Desenvolvimento Java',
     'Inteligência Artificial',
     'Especialista em Back-end',
