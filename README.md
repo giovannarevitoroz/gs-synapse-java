@@ -306,15 +306,6 @@ cd gs-synapse-java
 
 ---
 
-## Deploy
-
-O projeto está configurado para deploy no Render:
-
-* [Acessar no Render](https://dashboard.render.com/)
-* Servidor Java rodando na porta 8080
-* Banco PostgreSQL conectado automaticamente
-
-
 ## Estrutura de dependencias
 
 ```mermaid
