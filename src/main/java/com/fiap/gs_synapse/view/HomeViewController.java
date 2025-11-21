@@ -11,9 +11,20 @@ public class HomeViewController {
 
     @GetMapping("/home")
     public String home(Model model) {
+        // Título da página
         model.addAttribute("tituloPagina", "Dashboard");
-        // O fragmento deve ser incluído via Thymeleaf no layout principal
+
+        // Nome do usuário logado
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !auth.getPrincipal().equals("anonymousUser")) {
+            model.addAttribute("usuarioLogado", auth.getName());
+        } else {
+            model.addAttribute("usuarioLogado", "Visitante");
+        }
+
+        // Fragmento principal (se você estiver usando layout e fragments)
         model.addAttribute("conteudo", "fragments/home :: homeFragment");
+
         return "home";
     }
 
@@ -21,20 +32,15 @@ public class HomeViewController {
     public String root() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        // Verifica se a autenticação existe e se o principal não é o 'anonymousUser' padrão
         if (auth != null && auth.isAuthenticated() &&
                 !auth.getPrincipal().equals("anonymousUser")) {
-
-            // Usuário autenticado: ir para a home
             return "redirect:/home";
         } else {
-            // Usuário NÃO autenticado: ir direto para o login
             return "redirect:/login";
         }
     }
 
-    // Os outros métodos de redirecionamento permanecem iguais:
-
+    // Redirecionamentos rápidos
     @GetMapping("/competencias")
     public String competencias() {
         return "redirect:/competencias/listar";

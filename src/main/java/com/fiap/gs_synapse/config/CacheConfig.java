@@ -17,6 +17,7 @@ public class CacheConfig {
                 "registrosBemEstar",
                 "registroBemEstar",
                 "competencias",
+                "competencia",
                 "usuarios",
                 "recomendacoes",
                 "recomendacao",

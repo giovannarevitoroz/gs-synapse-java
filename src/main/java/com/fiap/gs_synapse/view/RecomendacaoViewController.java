@@ -21,7 +21,7 @@ public class RecomendacaoViewController {
     public String listar(Model model) {
         model.addAttribute("recomendacoes", service.listarTodos());
         model.addAttribute("recomendacaoDTO", new RecomendacaoDTO());
-        return "recomendacoes/recomendacao"; // ajustado para a subpasta
+        return "recomendacao";
     }
 
     // FORM NOVO
@@ -29,7 +29,7 @@ public class RecomendacaoViewController {
     public String novo(Model model) {
         model.addAttribute("recomendacaoDTO", new RecomendacaoDTO());
         model.addAttribute("recomendacoes", service.listarTodos());
-        return "recomendacoes/recomendacao";
+        return "recomendacao";
     }
 
     // SALVAR
@@ -45,7 +45,7 @@ public class RecomendacaoViewController {
         RecomendacaoDTO dto = service.buscarPorId(id);
         model.addAttribute("recomendacaoDTO", dto);
         model.addAttribute("recomendacoes", service.listarTodos());
-        return "recomendacoes/recomendacao";
+        return "recomendacao";
     }
 
     // ATUALIZAR

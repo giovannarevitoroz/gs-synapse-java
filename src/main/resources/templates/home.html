@@ -8,6 +8,20 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+
+<!-- ===================== HEADER COM LOGOUT ===================== -->
+<header class="dashboard-header">
+    <div class="header-left">
+        <h1>GS Synapse</h1>
+    </div>
+    <div class="header-right">
+        <span th:text="${usuarioLogado}">Usuário</span>
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit" class="btn-logout">Logout</button>
+        </form>
+    </div>
+</header>
+
 <!-- ===================== CARDS DE ESTATÍSTICAS ===================== -->
 <div class="dashboard-stats">
     <div class="stats-container">
@@ -155,5 +169,6 @@
         </div>
     </div>
 </div>
+
 </body>
 </html>
