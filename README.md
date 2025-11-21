@@ -23,6 +23,8 @@ O projeto está deployado no **Render**:
 
 * [Link do deploy](https://gs-synapse-java-qyyy.onrender.com)
 * [Link do vídeo](https://www.youtube.com/watch?v=nm4-LZsHj1M)
+* [Link do pitch](https://youtu.be/s7cH_2vpfaY)
+
 
 ---
 
