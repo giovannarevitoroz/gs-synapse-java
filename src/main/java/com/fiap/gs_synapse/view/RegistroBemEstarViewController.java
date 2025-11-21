@@ -19,7 +19,7 @@ public class RegistroBemEstarViewController {
     }
 
     // LISTAR + FORM
-    @GetMapping("/listar") // FIX: Mapeado para /bemestar/listar
+    @GetMapping("/listar")
     public String listar(Model model,
                          @RequestParam(defaultValue = "0") int page,
                          @RequestParam(defaultValue = "10") int size) {
@@ -33,7 +33,7 @@ public class RegistroBemEstarViewController {
         return "registro-bem-estar";
     }
 
-    // SALVAR
+    // SALVAR OU ATUALIZAR
     @PostMapping("/salvar")
     public String salvar(@ModelAttribute("registroDTO") RegistroBemEstarDTO dto) {
         if (dto.getIdRegistro() == null) {
@@ -41,13 +41,12 @@ public class RegistroBemEstarViewController {
         } else {
             service.atualizar(dto.getIdRegistro(), dto);
         }
-        return "redirect:/bemestar/listar"; // FIX: Redireciona para listar
+        return "redirect:/bemestar/listar";
     }
 
     // EDITAR
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
-
         RegistroBemEstarDTO dto = service.buscarPorId(id);
         Page<RegistroBemEstarDTO> registros = service.listar(PageRequest.of(0, 10));
 
@@ -62,6 +61,6 @@ public class RegistroBemEstarViewController {
     @GetMapping("/deletar/{id}")
     public String deletar(@PathVariable Long id) {
         service.deletar(id);
-        return "redirect:/bemestar/listar"; // FIX: Redireciona para listar
+        return "redirect:/bemestar/listar";
     }
 }

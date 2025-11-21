@@ -2,38 +2,95 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Login / Cadastro - GS Synapse</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+<div class="form-container">
 
-<h2>Login</h2>
+    <!-- LOGIN -->
+    <div class="form-centralizado">
+        <div class="form-header">
+            <div class="form-icon">🔐</div>
+            <h1>Login</h1>
+        </div>
 
-<!-- Mensagem de erro do Spring Security -->
-<div th:if="${param.error}">
-    Usuário ou senha inválidos!
+        <!-- Mensagens -->
+        <div th:if="${param.error}" class="alert alert-danger">
+            Usuário ou senha inválidos!
+        </div>
+        <div th:if="${param.logout}" class="alert alert-success">
+            Logout realizado com sucesso!
+        </div>
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label for="nomeUsuario" class="form-label">Usuário</label>
+                <input type="text" id="nomeUsuario" name="nomeUsuario" class="form-input"
+                       placeholder="Digite seu usuário" required>
+            </div>
+
+            <div class="form-group">
+                <label for="senhaUsuario" class="form-label">Senha</label>
+                <input type="password" id="senhaUsuario" name="senhaUsuario" class="form-input"
+                       placeholder="Digite sua senha" required>
+            </div>
+
+            <button type="submit" class="btn-submit">Entrar</button>
+        </form>
+
+        <div class="register-link">
+            Não tem conta? <a href="#" onclick="document.getElementById('cadastro').style.display='block'">Cadastre-se</a>
+        </div>
+    </div>
+
+    <!-- CADASTRO -->
+    <div id="cadastro" class="form-centralizado" style="display:none; margin-top: 30px;">
+        <div class="form-header">
+            <div class="form-icon">📝</div>
+            <h1>Cadastro</h1>
+        </div>
+
+        <form th:action="@{/registrar}" th:object="${usuarioDTO}" method="post">
+            <div class="form-group">
+                <label for="nomeUsuarioCadastro">Usuário</label>
+                <input type="text" id="nomeUsuarioCadastro" th:field="*{nomeUsuario}" placeholder="Digite seu usuário" required>
+            </div>
+
+            <div class="form-group">
+                <label for="senhaUsuarioCadastro">Senha</label>
+                <input type="password" id="senhaUsuarioCadastro" th:field="*{senhaUsuario}" placeholder="Digite sua senha" required>
+            </div>
+
+            <div class="form-group">
+                <label for="areaAtual">Área Atual</label>
+                <input type="text" id="areaAtual" th:field="*{areaAtual}" placeholder="Digite sua área atual">
+            </div>
+
+            <div class="form-group">
+                <label for="areaInteresse">Área de Interesse</label>
+                <input type="text" id="areaInteresse" th:field="*{areaInteresse}" placeholder="Digite sua área de interesse">
+            </div>
+
+            <div class="form-group">
+                <label for="objetivoCarreira">Objetivo de Carreira</label>
+                <input type="text" id="objetivoCarreira" th:field="*{objetivoCarreira}" placeholder="Digite seu objetivo">
+            </div>
+
+            <div class="form-group">
+                <label for="nivelExperiencia">Nível de Experiência</label>
+                <input type="text" id="nivelExperiencia" th:field="*{nivelExperiencia}" placeholder="Digite seu nível de experiência">
+            </div>
+
+            <button type="submit" class="btn-submit">Cadastrar</button>
+            <div class="register-link">
+                <a href="#" onclick="document.getElementById('cadastro').style.display='none'">Voltar ao Login</a>
+            </div>
+        </form>
+    </div>
+
 </div>
-
-<!-- Mensagem de logout -->
-<div th:if="${param.logout}">
-    Logout realizado com sucesso!
-</div>
-
-<form th:action="@{/login}" method="post">
-
-
-    <label for="nomeUsuario">Usuário:</label>
-    <input type="text" id="nomeUsuario" name="nomeUsuario" required>
-
-    <br><br>
-
-    <label for="senhaUsuario">Senha:</label>
-    <input type="password" id="senhaUsuario" name="senhaUsuario" required>
-
-    <br><br>
-
-    <button type="submit">Entrar</button>
-</form>
-
 </body>
 </html>

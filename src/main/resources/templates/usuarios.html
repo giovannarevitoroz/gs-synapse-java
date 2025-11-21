@@ -2,92 +2,129 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Gerenciar Usuários</title>
+    <title>Gerenciar Usuários - GS Synapse</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+<div th:replace="layout :: conteudo">
+    <div class="listing-container">
 
-<h1>Gerenciamento de Usuários</h1>
+        <!-- Cabeçalho -->
+        <div class="listing-header">
+            <h1>Gerenciamento de Usuários</h1>
+            <div class="listing-actions">
+                <h2 th:text="${usuarioDTO.idUsuario != null} ? 'Editar Usuário' : 'Novo Usuário'"></h2>
+            </div>
+        </div>
 
-<!-- FORMULÁRIO -->
-<h2 th:text="${usuarioDTO.idUsuario != null} ? 'Editar Usuário' : 'Novo Usuário'"></h2>
+        <div class="forms-container">
 
-<form th:action="@{/usuarios/salvar}" th:object="${usuarioDTO}" method="post">
+            <!-- FORMULÁRIO -->
+            <div class="form-box">
+                <form th:action="@{/usuarios/salvar}" th:object="${usuarioDTO}" method="post">
 
-    <input type="hidden" th:field="*{idUsuario}"/>
+                    <input type="hidden" th:field="*{idUsuario}"/>
 
-    <label>Nome:</label>
-    <input type="text" th:field="*{nomeUsuario}" required/><br/>
+                    <div class="form-group">
+                        <label>Nome:</label>
+                        <input type="text" th:field="*{nomeUsuario}" class="form-input" required/>
+                    </div>
 
-    <label>Senha:</label>
-    <input type="password" th:field="*{senhaUsuario}" required/><br/>
+                    <div class="form-group">
+                        <label>Senha:</label>
+                        <input type="password" th:field="*{senhaUsuario}" class="form-input" required/>
+                    </div>
 
-    <label>Área Atual:</label>
-    <input type="text" th:field="*{areaAtual}" required/><br/>
+                    <div class="form-group">
+                        <label>Área Atual:</label>
+                        <input type="text" th:field="*{areaAtual}" class="form-input" required/>
+                    </div>
 
-    <label>Área de Interesse:</label>
-    <input type="text" th:field="*{areaInteresse}" required/><br/>
+                    <div class="form-group">
+                        <label>Área de Interesse:</label>
+                        <input type="text" th:field="*{areaInteresse}" class="form-input" required/>
+                    </div>
 
-    <label>Objetivo de Carreira:</label>
-    <input type="text" th:field="*{objetivoCarreira}" required/><br/>
+                    <div class="form-group">
+                        <label>Objetivo de Carreira:</label>
+                        <input type="text" th:field="*{objetivoCarreira}" class="form-input" required/>
+                    </div>
 
-    <label>Nível de Experiência:</label>
-    <input type="text" th:field="*{nivelExperiencia}" required/><br/>
+                    <div class="form-group">
+                        <label>Nível de Experiência:</label>
+                        <input type="text" th:field="*{nivelExperiencia}" class="form-input" required/>
+                    </div>
 
-    <label>Competências:</label><br/>
-    <div th:each="comp : ${competencias}">
-        <input type="checkbox"
-               th:value="${comp.idCompetencia}"
-               th:field="*{competenciasIds}"
-               th:checked="${usuarioDTO.competenciasIds != null and usuarioDTO.competenciasIds.contains(comp.idCompetencia)}"/>
-        <span th:text="${comp.nomeCompetencia}"></span><br/>
+                    <div class="form-group">
+                        <label>Competências:</label>
+                        <div th:each="comp : ${competencias}">
+                            <input type="checkbox"
+                                   th:value="${comp.idCompetencia}"
+                                   th:field="*{competenciasIds}"
+                                   th:checked="${usuarioDTO.competenciasIds != null and usuarioDTO.competenciasIds.contains(comp.idCompetencia)}"/>
+                            <span th:text="${comp.nomeCompetencia}"></span><br/>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit"
+                            th:text="${usuarioDTO.idUsuario != null} ? 'Atualizar' : 'Salvar'"></button>
+                </form>
+            </div>
+
+            <!-- LISTA DE USUÁRIOS -->
+            <div class="form-box">
+                <div class="form-header">
+                    <div class="form-icon">📋</div>
+                    <h2>Usuários Registrados</h2>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Área Atual</th>
+                            <th>Interesse</th>
+                            <th>Experiência</th>
+                            <th>Competências</th>
+                            <th>Ações</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="u : ${usuarios.content}">
+                            <td th:text="${u.idUsuario}"></td>
+                            <td th:text="${u.nomeUsuario}"></td>
+                            <td th:text="${u.areaAtual}"></td>
+                            <td th:text="${u.areaInteresse}"></td>
+                            <td th:text="${u.nivelExperiencia}"></td>
+                            <td>
+                                <span th:each="c : ${u.competencias}" class="badge"
+                                      th:text="${c.nomeCompetencia}"></span>
+                            </td>
+                            <td>
+                                <a class="btn-secondary" th:href="@{/usuarios/editar/{id}(id=${u.idUsuario})}">Editar</a>
+                                <a class="btn-danger" th:href="@{/usuarios/deletar/{id}(id=${u.idUsuario})}"
+                                   onclick="return confirm('Deseja realmente excluir?');">Deletar</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(usuarios.content)}">
+                            <td colspan="7" style="text-align:center;">Nenhum usuário encontrado.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- PAGINAÇÃO -->
+                    <div class="pagination">
+                        <a th:if="${usuarios.hasPrevious()}" th:href="@{/usuarios/listar(page=${usuarios.number - 1})}">« Anterior</a>
+                        <span th:text="'Página ' + ${usuarios.number + 1} + ' de ' + ${usuarios.totalPages}"></span>
+                        <a th:if="${usuarios.hasNext()}" th:href="@{/usuarios/listar(page=${usuarios.number + 1})}">Próxima »</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
-
-    <button type="submit"
-            th:text="${usuarioDTO.idUsuario != null} ? 'Atualizar' : 'Salvar'"></button>
-
-</form>
-
-<hr/>
-
-<!-- LISTA DE USUÁRIOS -->
-<h2>Usuários Registrados</h2>
-
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>Área Atual</th>
-        <th>Interesse</th>
-        <th>Experiência</th>
-        <th>Competências</th>
-        <th>Ações</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    <tr th:each="u : ${usuarios}">
-        <td th:text="${u.idUsuario}"></td>
-        <td th:text="${u.nomeUsuario}"></td>
-        <td th:text="${u.areaAtual}"></td>
-        <td th:text="${u.areaInteresse}"></td>
-        <td th:text="${u.nivelExperiencia}"></td>
-
-        <td>
-            <span th:each="c : ${u.competencias}">
-                <span th:text="${c.nomeCompetencia}"></span><br/>
-            </span>
-        </td>
-
-        <td>
-            <a th:href="@{/usuarios/editar/{id}(id=${u.idUsuario})}">Editar</a> |
-            <a th:href="@{/usuarios/deletar/{id}(id=${u.idUsuario})}"
-               onclick="return confirm('Deseja realmente excluir?');">Deletar</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
-
+</div>
 </body>
 </html>

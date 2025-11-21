@@ -1,39 +1,159 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<html lang="pt-br"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${tituloPagina}">GS Synapse</title>
-
-    <!-- Estilos globais -->
+    <title>Dashboard - GS Synapse</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-
 <body>
+<!-- ===================== CARDS DE ESTATÍSTICAS ===================== -->
+<div class="dashboard-stats">
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-icon">💼</div>
+            <div class="stat-info">
+                <h3>Competências</h3>
+                <span class="stat-number" th:text="${totalCompetencias ?: '0'}">0</span>
+                <span class="stat-label">Cadastradas</span>
+            </div>
+        </div>
 
-<!-- ===================== MENU SUPERIOR ===================== -->
-<nav class="menu-top">
-    <a th:href="@{/}">Home</a>
-    <a th:href="@{/competencias}">Competências</a>
-    <a th:href="@{/recomendacoes}">Recomendações</a>
-    <a th:href="@{/recomendacoes/saude}">Saúde</a>
-    <a th:href="@{/recomendacoes/profissionais}">Profissionais</a>
-    <a th:href="@{/bemestar}">Bem-estar</a>
+        <div class="stat-card">
+            <div class="stat-icon">📋</div>
+            <div class="stat-info">
+                <h3>Recomendações</h3>
+                <span class="stat-number" th:text="${totalRecomendacoes ?: '0'}">0</span>
+                <span class="stat-label">Realizadas</span>
+            </div>
+        </div>
 
-    <!-- SOMENTE ADMIN VÊ ESTE LINK -->
-    <a th:href="@{/usuarios}" sec:authorize="hasRole('ADMIN')">Usuários</a>
+        <div class="stat-card">
+            <div class="stat-icon">🌿</div>
+            <div class="stat-info">
+                <h3>Bem-estar</h3>
+                <span class="stat-number" th:text="${totalRegistros ?: '0'}">0</span>
+                <span class="stat-label">Registros</span>
+            </div>
+        </div>
 
-    <!-- Logout -->
-    <form th:action="@{/logout}" method="post" style="display:inline;">
-        <button type="submit">Sair</button>
-    </form>
-</nav>
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-info">
+                <h3>Usuários</h3>
+                <span class="stat-number" th:text="${totalUsuarios ?: '0'}">0</span>
+                <span class="stat-label">Ativos</span>
+            </div>
+        </div>
+    </div>
+</div>
 
-<!-- ===================== CONTEÚDO ===================== -->
-<main class="content">
-    <h1 th:text="${tituloPagina}">Título da Página</h1>
-    <div th:text="${conteudo}">Aqui vai o conteúdo da página.</div>
-</main>
+<!-- ===================== AÇÕES RÁPIDAS ===================== -->
+<div class="quick-actions">
+    <h2>Ações Rápidas</h2>
+    <div class="actions-grid">
+        <a th:href="@{/competencias}" class="action-card">
+            <div class="action-icon">🚀</div>
+            <h3>Competências</h3>
+            <p>Gerencie suas habilidades e conhecimentos</p>
+        </a>
 
+        <a th:href="@{/recomendacoes}" class="action-card">
+            <div class="action-icon">💡</div>
+            <h3>Recomendações</h3>
+            <p>Veja sugestões personalizadas</p>
+        </a>
+
+        <a th:href="@{/bemestar}" class="action-card">
+            <div class="action-icon">🌿</div>
+            <h3>Bem-estar</h3>
+            <p>Registre seu estado diário</p>
+        </a>
+
+        <a th:href="@{/recomendacoes/saude}" class="action-card">
+            <div class="action-icon">🏥</div>
+            <h3>Saúde</h3>
+            <p>Recomendações de saúde</p>
+        </a>
+
+        <a th:href="@{/recomendacoes/profissionais}" class="action-card">
+            <div class="action-icon">💼</div>
+            <h3>Profissionais</h3>
+            <p>Dicas para carreira</p>
+        </a>
+
+        <a th:href="@{/usuarios}" class="action-card" sec:authorize="hasRole('ADMIN')">
+            <div class="action-icon">👥</div>
+            <h3>Usuários</h3>
+            <p>Gerencie usuários do sistema</p>
+        </a>
+    </div>
+</div>
+
+<!-- ===================== RECOMENDAÇÕES RECENTES ===================== -->
+<div class="recent-section">
+    <div class="section-header">
+        <h2>Recomendações Recentes</h2>
+        <a th:href="@{/recomendacoes}" class="btn-secondary">Ver Todas</a>
+    </div>
+
+    <div class="recommendations-grid">
+        <div th:each="rec : ${recomendacoesRecentes}" class="recommendation-card">
+            <div class="rec-icon">💡</div>
+            <div class="rec-content">
+                <h4 th:text="${rec.tituloRecomendacao}">Título</h4>
+                <p th:text="${rec.descricaoRecomendacao}">Descrição da recomendação...</p>
+                <span class="rec-date" th:text="${#dates.format(rec.dataRecomendacao, 'dd/MM/yyyy')}">Data</span>
+            </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(recomendacoesRecentes)}" class="empty-state">
+            <div class="empty-icon">📋</div>
+            <h3>Nenhuma recomendação recente</h3>
+            <p>As recomendações aparecerão aqui quando disponíveis.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== STATUS DE BEM-ESTAR ===================== -->
+<div class="wellness-section">
+    <div class="section-header">
+        <h2>Seu Bem-estar</h2>
+        <a th:href="@{/bemestar}" class="btn-secondary">Registrar Hoje</a>
+    </div>
+
+    <div class="wellness-cards">
+        <div class="wellness-card">
+            <div class="wellness-metric">
+                <span class="metric-value" th:text="${ultimoRegistro?.nivelEnergia ?: '--'}">--</span>
+                <span class="metric-label">Energia</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" th:style="'width: ' + ${(ultimoRegistro?.nivelEnergia ?: 0) * 10} + '%;'"></div>
+            </div>
+        </div>
+
+        <div class="wellness-card">
+            <div class="wellness-metric">
+                <span class="metric-value" th:text="${ultimoRegistro?.nivelEstresse ?: '--'}">--</span>
+                <span class="metric-label">Estresse</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill stress" th:style="'width: ' + ${(ultimoRegistro?.nivelEstresse ?: 0) * 10} + '%;'"></div>
+            </div>
+        </div>
+
+        <div class="wellness-card">
+            <div class="wellness-metric">
+                <span class="metric-value" th:text="${ultimoRegistro?.horasSono ?: '--'}">--</span>
+                <span class="metric-label">Horas de Sono</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill sleep" th:style="'width: ' + ${(ultimoRegistro?.horasSono ?: 0) * 12.5} + '%;'"></div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

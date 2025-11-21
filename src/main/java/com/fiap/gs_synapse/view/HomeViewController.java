@@ -17,18 +17,6 @@ public class HomeViewController {
         return "home";
     }
 
-    /**
-     * ❌ MÉTODO REMOVIDO: O mapeamento /login foi consolidado no LoginViewController para evitar conflitos.
-     */
-    // @GetMapping("/login")
-    // public String login(Model model) {
-    //     // ... lógica movida para LoginViewController
-    // }
-
-    /**
-     * CORREÇÃO: O path raiz (/) verifica se o usuário está autenticado
-     * para evitar o loop de redirecionamento / -> /home -> /login.
-     */
     @GetMapping("/")
     public String root() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

@@ -20,7 +20,7 @@ public class RecomendacaoSaudeViewController {
     }
 
     // LISTAR TODAS
-    @GetMapping("/listar") // FIX: Mapeado para /recomendacoes/saude/listar
+    @GetMapping("/listar")
     public String listarTodas(Model model, Locale locale) {
         List<RecomendacaoSaudeDTO> recomendacoes = service.listarTodos(locale);
         model.addAttribute("recomendacoes", recomendacoes);
@@ -28,7 +28,7 @@ public class RecomendacaoSaudeViewController {
         return "recomendacao-saude";
     }
 
-    // SALVAR NOVA OU ATUALIZAR EXISTENTE
+    // SALVAR OU ATUALIZAR
     @PostMapping("/salvar")
     public String salvar(@ModelAttribute("recomendacaoSaudeDTO") RecomendacaoSaudeDTO dto, Locale locale) {
         if (dto.getIdRecomendacao() != null && service.existe(dto.getIdRecomendacao())) {
@@ -36,7 +36,7 @@ public class RecomendacaoSaudeViewController {
         } else {
             service.criar(dto, locale);
         }
-        return "redirect:/recomendacoes/saude/listar"; // FIX: Redireciona para listar
+        return "redirect:/recomendacoes/saude/listar";
     }
 
     // EDITAR
@@ -53,6 +53,6 @@ public class RecomendacaoSaudeViewController {
     @GetMapping("/deletar/{id}")
     public String deletar(@PathVariable Long id, Locale locale) {
         service.deletar(id, locale);
-        return "redirect:/recomendacoes/saude/listar"; // FIX: Redireciona para listar
+        return "redirect:/recomendacoes/saude/listar";
     }
 }
