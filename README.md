@@ -85,6 +85,325 @@ Synapse/
 └── 📄 pom.xml
 ```
 
+# GS Synapse
+
+![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)
+
+API para gerenciamento de recomendações de saúde e carreira, registro de bem-estar e competências de usuários para integração com IA.
+
+---
+
+## 🌟 O Futuro do Trabalho
+
+O futuro do trabalho já começou. Avanços tecnológicos como inteligência artificial, robótica e automação estão transformando profissões, criando novas oportunidades e desafios inéditos. Mudanças sociais, demográficas e ambientais estão redesenhando como vivemos e trabalhamos.
+
+O **GS Synapse** foi desenvolvido como parte do **Desafio FIAP – Futuro do Trabalho**, preparando usuários para carreiras emergentes e promovendo bem-estar, reskilling e acompanhamento de competências.
+
+Principais pontos do desafio:
+
+* Até 2030, milhões de empregos serão extintos ou transformados; requalificação constante será essencial.
+* Habilidades humanas como **criatividade, empatia e pensamento crítico** serão altamente valorizadas.
+* Ferramentas digitais e IA podem apoiar educação, saúde mental e decisões de carreira.
+* O projeto conecta tecnologia e propósito para criar soluções inclusivas, sustentáveis e de impacto social.
+
+## Deploy
+
+O projeto está deployado no **Render**:
+
+* [Link do deploy](https://gs-synapse.onrender.com)
+
+---
+
+## Competências Desenvolvidas
+
+* Spring Boot, JPA/Hibernate, SQL e PostgreSQL
+* Segurança com Spring Security e JWT
+* Implementação de IA generativa aplicada a recomendações
+* Docker e deploy em Render
+* Mensageria com RabbitMQ
+* Internacionalização (i18n) e cache de aplicação
+* Testes unitários e integração
+
+---
+
+## Estrutura do projeto 
+
+```text
+Synapse/
+├── 📄 Dockerfile
+├── 📁 src/main/java/com/fiap/gs_synapse/
+│   ├── 📁 controller/
+│   │   ├── CompetenciaViewController.java
+│   │   ├── HomeViewController.java
+│   │   ├── RecomendacaoProfissionalViewController.java
+│   │   ├── RecomendacaoSaudeViewController.java
+│   │   ├── RecomendacaoViewController.java
+│   │   ├── RegistroBemEstarViewController.java
+│   │   └── UsuarioViewController.java
+│   ├── 📁 model/            # Entidades
+│   │   ├── Competencia.java
+│   │   ├── Recomendacao.java
+│   │   ├── RecomendacaoProfissional.java
+│   │   ├── RecomendacaoSaude.java
+│   │   ├── RegistroBemEstar.java
+│   │   └── Usuario.java
+│   ├── 📁 repository/
+│   │   ├── CompetenciaRepository.java
+│   │   ├── RecomendacaoProfissionalRepository.java
+│   │   ├── RecomendacaoRepository.java
+│   │   ├── RecomendacaoSaudeRepository.java
+│   │   ├── RegistroBemEstarRepository.java
+│   │   └── UsuarioRepository.java
+│   ├── 📁 service/
+│   │   ├── CompetenciaService.java
+│   │   ├── CustomUserDetailsService.java
+│   │   ├── RecomendacaoProfissionalService.java
+│   │   ├── RecomendacaoSaudeService.java
+│   │   ├── RecomendacaoService.java
+│   │   ├── RegistroBemEstarService.java
+│   │   └── UsuarioService.java
+│   ├── 📁 dto/
+│   │   ├── CompetenciaDTO.java
+│   │   ├── RecomendacaoDTO.java
+│   │   ├── RecomendacaoProfissionalDTO.java
+│   │   ├── RecomendacaoSaudeDTO.java
+│   │   ├── RegistroBemEstarDTO.java
+│   │   └── UsuarioDTO.java
+│   ├── 📁 config/
+│   │   ├── CacheConfig.java
+│   │   ├── InternationalizationConfig.java
+│   │   ├── JwtUtil.java
+│   │   ├── JwtRequestFilter.java
+│   │   ├── RabbitMQConfig.java
+│   │   ├── SecurityConfig.java
+│   │   └── WebConfig.java
+│   └── 📁 exception/
+│       ├── BusinessException.java
+│       ├── CustomExceptionHandler.java
+│       └── ResourceNotFoundException.java
+├── 📁 messaging/
+│   ├── EmailQueueListener.java
+│   └── EmailQueueProducer.java
+├── 📄 GsSynapseApplication.java
+├── 📁 src/main/resources/
+│   ├── 📁 db/migration/
+│   │   ├── V2__novo_primeiro_script.sql
+│   │   ├── V3__ajustar_restricao.sql
+│   │   ├── V4__corrigir_admin_role.sql
+│   │   ├── V5__creating_new_users.sql
+│   │   └── V6__alter_table_usuario.sql
+│   └── 📁 templates/
+│       ├── 📁 static/
+│       │   ├── 📁 css/
+│       │   │   └── style.css
+│       ├── 📁 competencias/
+│       │   └── competencias.html
+│       ├── 📁 home/
+│       │   └── home.html
+│       ├── 📁 login/
+│       │   └── login.html
+│       ├── 📁 recomendacoes/
+│       │   └── recomendacoes.html
+│       ├── 📁 recomendacoes-profissionais/
+│       │   └── recomendacoes-profissionais.html
+│       ├── 📁 recomendacoes-saude/
+│       │   └── recomendacoes-saude.html
+│       ├── 📁 registro-bem-estar/
+│       │   └── registro-bem-estar.html
+│       └── 📁 usuarios/
+│           └── usuarios.html
+└── 📄 pom.xml
+```
+
+### Relações importantes:
+
+1. `usuario` → `recomendacao`
+   Um usuário pode ter várias recomendações.
+
+2. `recomendacao` → `recomendacao_profissional` / `recomendacao_saude`
+   Cada recomendação é ou profissional ou de saúde (1:1).
+
+3. `usuario` → `registro_bem_estar`
+   Um usuário pode ter múltiplos registros de bem-estar.
+
+4. `usuario` ↔ `competencia` (via `usuario_competencia`)
+   Muitos para muitos: um usuário pode ter várias competências e vice-versa.
+
+
+
+---
+
+## Tecnologias e Dependências
+
+* **Java 17**
+* **Spring Boot 3.5.7**
+
+  * Web, JPA, Security, Validation, Cache, Thymeleaf, AMQP
+* **Banco de Dados**
+
+  * PostgreSQL (produção no Render)
+* **Flyway** para migrações de banco
+* **Lombok** para redução de boilerplate
+* **JWT** para autenticação
+* **Springdoc OpenAPI** para documentação da API
+* **RabbitMQ (CloudAMQP)** para filas assíncronas
+
+Dependências no Maven:
+
+```xml
+<dependencies>
+    <dependency>spring-boot-starter-web</dependency>
+    <dependency>spring-boot-starter-data-jpa</dependency>
+    <dependency>spring-boot-starter-security</dependency>
+    <dependency>spring-boot-starter-validation</dependency>
+    <dependency>spring-boot-starter-thymeleaf</dependency>
+    <dependency>spring-boot-starter-cache</dependency>
+    <dependency>spring-boot-starter-amqp</dependency>
+    <dependency>postgresql</dependency>
+    <dependency>h2</dependency>
+    <dependency>lombok</dependency>
+    <dependency>flyway-core</dependency>
+    <dependency>jjwt-api/impl/jackson</dependency>
+    <dependency>springdoc-openapi-starter-webmvc-ui</dependency>
+    <dependency>springdoc-openapi-data-rest</dependency>
+</dependencies>
+```
+
+---
+
+## Configuração no Render
+
+* **Banco PostgreSQL:**
+  `jdbc:postgresql://dpg-d4fkosv5r7bs73cqcjr0-a.oregon-postgres.render.com:5432/synapse_t3j2`
+  Usuário: `synapse_t3j2_user`
+  Senha: `5cfvN6OJtYVsbJ1A6QNVI4zFdIviLmuU`
+
+* **RabbitMQ (CloudAMQP)**:
+  `amqps://mnufithp:7H4ttYAWYGuOyDwOtzvu2DfnUU9Hd4Lo@gorilla.lmq.cloudamqp.com/mnufithp`
+  Fila: `gs_queue`
+
+* **Porta do servidor:** 8080
+
+O projeto está configurado para rodar no Render, incluindo o banco de dados PostgreSQL remoto e filas RabbitMQ, com suporte a i18n, paginação e logging detalhado.
+
+---
+
+## 🚀 Funcionalidades
+
+* Cadastro de usuários com roles (`ROLE_USER`, `ROLE_ADMIN`)
+* Registro de bem-estar (humor, horas de sono, nível de estresse e energia)
+* Cadastro de competências e vinculação com usuários
+* Recomendação de saúde e carreira (profissional)
+* Segurança via **JWT** e Spring Security
+* Filas assíncronas com **RabbitMQ**
+
+---
+
+## Estrutura do Banco de Dados
+
+### Tabelas principais
+
+```mermaid
+erDiagram
+    USUARIO ||--o{ REGISTRO_BEM_ESTAR : possui
+    USUARIO ||--o{ RECOMENDACAO : faz
+    RECOMENDACAO ||--o| RECOMENDACAO_PROFISSIONAL : detalha
+    RECOMENDACAO ||--o| RECOMENDACAO_SAUDE : detalha
+    USUARIO ||--o{ USUARIO_COMPETENCIA : vincula
+    COMPETENCIA ||--o{ USUARIO_COMPETENCIA : vincula
+
+    USUARIO {
+        BIGINT id_usuario PK
+        VARCHAR nome_usuario
+        VARCHAR senha_usuario
+        VARCHAR area_atual
+        VARCHAR area_interesse
+        VARCHAR objetivo_carreira
+        VARCHAR nivel_experiencia
+        VARCHAR role
+    }
+    REGISTRO_BEM_ESTAR {
+        BIGINT id_registro PK
+        DATE data_registro
+        VARCHAR humor_registro
+        INTEGER horas_sono
+        INTEGER horas_trabalho
+        INTEGER nivel_energia
+        INTEGER nivel_estresse
+        VARCHAR observacao_registro
+        BIGINT usuario_id_usuario FK
+    }
+    COMPETENCIA {
+        BIGINT id_competencia PK
+        VARCHAR nome_competencia
+        VARCHAR categoria_competencia
+        VARCHAR descricao_competencia
+    }
+    USUARIO_COMPETENCIA {
+        BIGINT usuario_id_usuario FK
+        BIGINT competencia_id_competencia FK
+    }
+    RECOMENDACAO {
+        BIGINT id_recomendacao PK
+        DATE data_recomendacao
+        VARCHAR descricao_recomendacao
+        VARCHAR prompt_usado
+        VARCHAR titulo_recomendacao
+        BIGINT usuario_id_usuario FK
+    }
+    RECOMENDACAO_PROFISSIONAL {
+        BIGINT id_recomendacao PK
+        VARCHAR categoria_recomendacao
+        VARCHAR area_recomendacao
+        VARCHAR fonte_recomendacao
+    }
+    RECOMENDACAO_SAUDE {
+        BIGINT id_recomendacao PK
+        VARCHAR tipo_saude
+        VARCHAR nivel_alerta
+        VARCHAR mensagem_saude
+    }
+```
+
+---
+
+## Rodando o Projeto Localmente
+
+1. Clone o repositório:
+
+```bash
+https://github.com/giovannarevitoroz/gs-synapse-java.git
+cd gs-synapse-java
+```
+
+2. Configure o `application.properties` para o PostgreSQL local ou remoto.
+
+3. Compile e rode com Maven:
+
+```bash
+./mvnw clean install
+./mvnw spring-boot:run
+```
+
+4. Acesse a API:
+   `http://localhost:8080`
+
+5. Documentação via OpenAPI:
+   `http://localhost:8080/swagger-ui.html`
+
+---
+
+## Deploy
+
+O projeto está configurado para deploy no Render:
+
+* [Acessar no Render](https://dashboard.render.com/)
+* Servidor Java rodando na porta 8080
+* Banco PostgreSQL conectado automaticamente
+
+
+## Estrutura de dependencias
+
 ```mermaid
 graph LR
     subgraph GS Synapse
@@ -152,3 +471,14 @@ graph LR
     A --> N
     A --> O
 ```
+
+## Aprendizados
+
+* Integração completa Spring Boot + PostgreSQL + RabbitMQ
+* Configuração de Flyway para versionamento de banco
+* Implementação de segurança JWT e roles de usuário
+* Estrutura modularizada (API, dados, segurança, UI com Thymeleaf)
+
+---
+
+
