@@ -86,7 +86,8 @@
                         <td th:text="${rec.tituloRecomendacao}"></td>
                         <td th:text="${rec.descricaoRecomendacao}"></td>
                         <td th:text="${rec.promptUsado}"></td>
-                        <td th:text="${#dates.format(rec.dataRecomendacao, 'dd/MM/yyyy')}"></td>
+                        <!-- Correção: trata datas nulas -->
+                        <td th:text="${rec.dataRecomendacao != null} ? ${#dates.format(rec.dataRecomendacao, 'dd/MM/yyyy')} : '-'"></td>
                         <td th:text="${rec.usuarioId}"></td>
                         <td>
                             <a class="btn-secondary"

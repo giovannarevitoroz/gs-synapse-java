@@ -32,7 +32,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String path = request.getServletPath();
 
-        // ⛔ IGNORA TODAS AS ROTAS DO THYMELEAF E AUTENTICAÇÃO
         if (path.equals("/") ||
                 path.equals("/login") ||
                 path.equals("/logout") ||
@@ -46,7 +45,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             return;
         }
 
-        // ⛔ IGNORA FORMULÁRIO DE CADASTRO SE EXISTIR
         if (path.startsWith("/usuarios") && request.getMethod().equals("POST")) {
             chain.doFilter(request, response);
             return;

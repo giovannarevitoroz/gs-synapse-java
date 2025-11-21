@@ -23,16 +23,11 @@ public class SecurityConfig {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
-    // 🔓 SENHA EM TEXTO PLANO PARA TESTES
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // ⚠️ Somente para testes! Não usar em produção.
         return org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
     }
 
-    /**
-     * 🔧 Permite ponto e vírgula (;) na URL para jsessionid
-     */
     @Bean
     public HttpFirewall allowSemicolonHttpFirewall() {
         StrictHttpFirewall firewall = new StrictHttpFirewall();
@@ -76,7 +71,6 @@ public class SecurityConfig {
         // 🔥 JWT FILTRO
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
-        // Permite frameOptions para H2-console (opcional)
         http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
 
         return http.build();
