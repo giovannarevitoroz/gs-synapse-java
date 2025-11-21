@@ -1,7 +1,5 @@
 # Synapse
 
-![Logo](C:\Users\giova\OneDrive\Imagens\Capturas de tela\Captura de tela 2025-11-21 092128.png)
-
 API para gerenciamento de recomendações de saúde e carreira, registro de bem-estar e competências de usuários para integração com IA.
 
 ---
