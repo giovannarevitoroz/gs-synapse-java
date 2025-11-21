@@ -63,7 +63,7 @@
             </form>
         </div>
 
-        <!-- Lista -->
+        <!-- Lista de Recomendações -->
         <div class="form-box">
             <div class="form-header">
                 <div class="form-icon">📊</div>
@@ -89,7 +89,8 @@
                         <td th:text="${#strings.abbreviate(rec.mensagemSaude, 50)}"></td>
                         <td>
                             <a class="btn-secondary" th:href="@{/recomendacoes/saude/editar/{id}(id=${rec.idRecomendacao})}">Editar</a>
-                            <a class="btn-danger" th:href="@{/recomendacoes/saude/deletar/{id}(id=${rec.idRecomendacao})}" onclick="return confirm('Deseja realmente deletar?');">Deletar</a>
+                            <a class="btn-danger" th:href="@{/recomendacoes/saude/deletar/{id}(id=${rec.idRecomendacao})}"
+                               onclick="return confirm('Deseja realmente deletar?');">Deletar</a>
                         </td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(recomendacoes)}">

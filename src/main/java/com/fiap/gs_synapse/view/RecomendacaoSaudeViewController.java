@@ -1,58 +1,64 @@
 package com.fiap.gs_synapse.view;
 
-import com.fiap.gs_synapse.dto.RecomendacaoSaudeDTO;
-import com.fiap.gs_synapse.service.RecomendacaoSaudeService;
+import com.fiap.gs_synapse.dto.RecomendacaoDTO;
+import com.fiap.gs_synapse.service.RecomendacaoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Locale;
 
 @Controller
 @RequestMapping("/recomendacoes/saude")
 public class RecomendacaoSaudeViewController {
 
-    private final RecomendacaoSaudeService service;
+    private final RecomendacaoService service;
 
-    public RecomendacaoSaudeViewController(RecomendacaoSaudeService service) {
+    public RecomendacaoSaudeViewController(RecomendacaoService service) {
         this.service = service;
     }
 
-    // LISTAR TODAS
+    // LISTAR RECOMENDAÇÕES DE SAÚDE
     @GetMapping("/listar")
-    public String listarTodas(Model model, Locale locale) {
-        List<RecomendacaoSaudeDTO> recomendacoes = service.listarTodos(locale);
-        model.addAttribute("recomendacoes", recomendacoes);
-        model.addAttribute("recomendacaoSaudeDTO", new RecomendacaoSaudeDTO());
+    public String listar(Model model) {
+        model.addAttribute("recomendacoes", service.listarTodos());
+        model.addAttribute("recomendacaoSaudeDTO", new RecomendacaoDTO());
         return "recomendacao-saude";
     }
 
-    // SALVAR OU ATUALIZAR
+    // FORM NOVO
+    @GetMapping("/novo")
+    public String novo(Model model) {
+        model.addAttribute("recomendacaoSaudeDTO", new RecomendacaoDTO());
+        model.addAttribute("recomendacoes", service.listarTodos());
+        return "recomendacao-saude";
+    }
+
+    // SALVAR
     @PostMapping("/salvar")
-    public String salvar(@ModelAttribute("recomendacaoSaudeDTO") RecomendacaoSaudeDTO dto, Locale locale) {
-        if (dto.getIdRecomendacao() != null && service.existe(dto.getIdRecomendacao())) {
-            service.atualizar(dto.getIdRecomendacao(), dto, locale);
-        } else {
-            service.criar(dto, locale);
-        }
+    public String salvar(@ModelAttribute("recomendacaoSaudeDTO") RecomendacaoDTO dto) {
+        service.salvar(dto);
         return "redirect:/recomendacoes/saude/listar";
     }
 
     // EDITAR
     @GetMapping("/editar/{id}")
-    public String editar(@PathVariable Long id, Model model, Locale locale) {
-        RecomendacaoSaudeDTO dto = service.buscarPorId(id, locale);
-        List<RecomendacaoSaudeDTO> recomendacoes = service.listarTodos(locale);
+    public String editar(@PathVariable Long id, Model model) {
+        RecomendacaoDTO dto = service.buscarPorId(id);
         model.addAttribute("recomendacaoSaudeDTO", dto);
-        model.addAttribute("recomendacoes", recomendacoes);
+        model.addAttribute("recomendacoes", service.listarTodos());
         return "recomendacao-saude";
+    }
+
+    // ATUALIZAR
+    @PostMapping("/atualizar/{id}")
+    public String atualizar(@PathVariable Long id, @ModelAttribute("recomendacaoSaudeDTO") RecomendacaoDTO dto) {
+        service.atualizar(id, dto);
+        return "redirect:/recomendacoes/saude/listar";
     }
 
     // DELETAR
     @GetMapping("/deletar/{id}")
-    public String deletar(@PathVariable Long id, Locale locale) {
-        service.deletar(id, locale);
+    public String deletar(@PathVariable Long id) {
+        service.deletar(id);
         return "redirect:/recomendacoes/saude/listar";
     }
 }

@@ -23,13 +23,12 @@
         <div class="form-box">
             <div class="form-header">
                 <div class="form-icon">💼</div>
-                <h2 th:text="${recomendacaoProfissionalDTO.idRecomendacao != null} ?
-                              'Editar Recomendação Profissional' :
-                              'Nova Recomendação Profissional'">Nova Recomendação Profissional</h2>
+                <h2 th:text="${recomendacaoProfissionalDTO.idRecomendacao != null} ? 'Editar Recomendação Profissional' : 'Nova Recomendação Profissional'">
+                    Nova Recomendação Profissional
+                </h2>
             </div>
 
             <form th:action="@{/recomendacoes/profissionais/salvar}" th:object="${recomendacaoProfissionalDTO}" method="post">
-
                 <input type="hidden" th:field="*{idRecomendacao}" />
 
                 <div class="form-group">
