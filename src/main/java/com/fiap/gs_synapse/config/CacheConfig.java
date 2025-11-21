@@ -1,10 +1,10 @@
 package com.fiap.gs_synapse.config;
 
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.cache.annotation.EnableCaching;
 
 @Configuration
 @EnableCaching
@@ -12,13 +12,18 @@ public class CacheConfig {
 
     @Bean
     public CacheManager cacheManager() {
+        // Cria caches em memória com os nomes que você usa nas anotações
         return new ConcurrentMapCacheManager(
-                "competencias",
                 "registrosBemEstar",
+                "registroBemEstar",
+                "competencias",
                 "usuarios",
                 "recomendacoes",
+                "recomendacao",
                 "recomendacoesProfissionais",
-                "recomendacoesSaude"
+                "recomendacaoProfissional",
+                "recomendacoesSaude",
+                "recomendacaoSaude"
         );
     }
 }

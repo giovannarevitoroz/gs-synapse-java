@@ -18,7 +18,7 @@ public class RegistroBemEstarViewController {
         this.service = service;
     }
 
-    // LISTAR + FORMULÁRIO
+    // LISTAR + FORM
     @GetMapping("/listar")
     public String listar(Model model,
                          @RequestParam(defaultValue = "0") int page,
@@ -30,7 +30,7 @@ public class RegistroBemEstarViewController {
         model.addAttribute("registroDTO", new RegistroBemEstarDTO());
         model.addAttribute("paginaAtual", page);
 
-        return "registro-bem-estar"; // nome do template
+        return "registro-bem-estar";
     }
 
     // SALVAR OU ATUALIZAR

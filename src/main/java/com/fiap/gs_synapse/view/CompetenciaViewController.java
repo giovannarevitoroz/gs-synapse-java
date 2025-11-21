@@ -27,15 +27,15 @@ public class CompetenciaViewController {
         model.addAttribute("competencias", competenciasPage.getContent()); // lista simples
         model.addAttribute("paginaAtual", competenciasPage.getNumber());
         model.addAttribute("totalPaginas", competenciasPage.getTotalPages());
-        model.addAttribute("competencia", new CompetenciaDTO());
-        return "competencias/lista";
+        model.addAttribute("competencia", new CompetenciaDTO()); // formulário vazio
+        return "competencias"; // usa o template unico competencias.html
     }
 
     // FORM PARA CRIAR (GET /competencias/novo)
     @GetMapping("/novo")
     public String novo(Model model) {
         model.addAttribute("competencia", new CompetenciaDTO());
-        return "competencias/editar";
+        return "competencias"; // mesmo template para criar
     }
 
     // FORM PARA EDITAR (GET /competencias/editar/{id})
@@ -43,7 +43,7 @@ public class CompetenciaViewController {
     public String editar(@PathVariable Long id, Model model) {
         CompetenciaDTO dto = service.buscarPorId(id);
         model.addAttribute("competencia", dto);
-        return "competencias/editar";
+        return "competencias"; // mesmo template para editar
     }
 
     // SALVAR OU ATUALIZAR (POST /competencias/salvar)

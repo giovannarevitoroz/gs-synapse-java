@@ -1,121 +1,107 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>Recomendações de Saúde - GS Synapse</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<div th:replace="layout :: conteudo">
-    <div class="listing-container">
 
-        <!-- Cabeçalho -->
-        <div class="listing-header">
-            <h1>Gerenciar Recomendações de Saúde</h1>
-            <div class="listing-actions">
-                <a th:href="@{/recomendacoes/saude/novo}" class="btn-primary">Nova Recomendação</a>
-            </div>
-        </div>
+<div class="listing-container">
 
-        <div class="forms-container">
-
-            <!-- Formulário -->
-            <div class="form-box">
-                <div class="form-header">
-                    <div class="form-icon">🏥</div>
-                    <h2 th:text="${recomendacaoSaudeDTO.idRecomendacao != null} ? 'Editar Recomendação de Saúde' : 'Nova Recomendação de Saúde'"></h2>
-                </div>
-
-                <form th:action="@{/recomendacoes/saude/salvar}" th:object="${recomendacaoSaudeDTO}" method="post">
-                    <input type="hidden" th:field="*{idRecomendacao}" />
-
-                    <div class="form-group">
-                        <label class="form-label">Tipo de Saúde</label>
-                        <select th:field="*{tipoSaude}" class="form-input" required>
-                            <option value="">Selecione o tipo</option>
-                            <option value="Mental">Saúde Mental</option>
-                            <option value="Física">Saúde Física</option>
-                            <option value="Emocional">Saúde Emocional</option>
-                            <option value="Nutricional">Saúde Nutricional</option>
-                            <option value="Preventiva">Saúde Preventiva</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Nível de Alerta</label>
-                        <select th:field="*{nivelAlerta}" class="form-input" required>
-                            <option value="">Selecione o nível</option>
-                            <option value="Baixo">Baixo</option>
-                            <option value="Médio">Médio</option>
-                            <option value="Alto">Alto</option>
-                            <option value="Crítico">Crítico</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Mensagem</label>
-                        <textarea th:field="*{mensagemSaude}" class="form-input" rows="5"
-                                  placeholder="Digite a mensagem de recomendação..." required></textarea>
-                    </div>
-
-                    <button type="submit" class="btn-submit"
-                            th:text="${recomendacaoSaudeDTO.idRecomendacao != null} ? 'Atualizar' : 'Salvar'">Salvar</button>
-                </form>
-            </div>
-
-            <!-- Lista -->
-            <div class="form-box">
-                <div class="form-header">
-                    <div class="form-icon">📊</div>
-                    <h2>Recomendações de Saúde Existentes</h2>
-                </div>
-
-                <div class="table-container">
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Tipo</th>
-                            <th>Nível Alerta</th>
-                            <th>Mensagem</th>
-                            <th>Ações</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="rec : ${recomendacoes}">
-                            <td th:text="${rec.idRecomendacao}"></td>
-                            <td>
-                                    <span class="badge"
-                                          th:classappend="${rec.tipoSaude} == 'Mental' ? 'badge-mental' :
-                                                           ${rec.tipoSaude} == 'Física' ? 'badge-fisica' :
-                                                           ${rec.tipoSaude} == 'Emocional' ? 'badge-emocional' :
-                                                           'badge-default'"
-                                          th:text="${rec.tipoSaude}"></span>
-                            </td>
-                            <td>
-                                    <span class="badge"
-                                          th:classappend="${rec.nivelAlerta} == 'Baixo' ? 'badge-baixo' :
-                                                           ${rec.nivelAlerta} == 'Médio' ? 'badge-medio' :
-                                                           ${rec.nivelAlerta} == 'Alto' ? 'badge-alto' :
-                                                           'badge-critico'"
-                                          th:text="${rec.nivelAlerta}"></span>
-                            </td>
-                            <td th:text="${#strings.abbreviate(rec.mensagemSaude, 50)}"></td>
-                            <td>
-                                <a class="btn-secondary" th:href="@{/recomendacoes/saude/editar/{id}(id=${rec.idRecomendacao})}">Editar</a>
-                                <a class="btn-danger" th:href="@{/recomendacoes/saude/deletar/{id}(id=${rec.idRecomendacao})}" onclick="return confirm('Deseja realmente deletar?');">Deletar</a>
-                            </td>
-                        </tr>
-                        <tr th:if="${#lists.isEmpty(recomendacoes)}">
-                            <td colspan="5" style="text-align:center;">Nenhuma recomendação cadastrada.</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
+    <!-- Cabeçalho -->
+    <div class="listing-header">
+        <h1>Gerenciar Recomendações de Saúde</h1>
+        <div class="listing-actions">
+            <a th:href="@{/recomendacoes/saude/novo}" class="btn-primary">Nova Recomendação</a>
         </div>
     </div>
+
+    <div class="forms-container">
+
+        <!-- Formulário -->
+        <div class="form-box">
+            <div class="form-header">
+                <div class="form-icon">🏥</div>
+                <h2 th:text="${recomendacaoSaudeDTO.idRecomendacao != null} ? 'Editar Recomendação de Saúde' : 'Nova Recomendação de Saúde'"></h2>
+            </div>
+
+            <form th:action="@{/recomendacoes/saude/salvar}" th:object="${recomendacaoSaudeDTO}" method="post">
+                <input type="hidden" th:field="*{idRecomendacao}" />
+
+                <div class="form-group">
+                    <label class="form-label">Tipo de Saúde</label>
+                    <select th:field="*{tipoSaude}" class="form-input" required>
+                        <option value="">Selecione o tipo</option>
+                        <option value="Mental">Saúde Mental</option>
+                        <option value="Física">Saúde Física</option>
+                        <option value="Emocional">Saúde Emocional</option>
+                        <option value="Nutricional">Saúde Nutricional</option>
+                        <option value="Preventiva">Saúde Preventiva</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nível de Alerta</label>
+                    <select th:field="*{nivelAlerta}" class="form-input" required>
+                        <option value="">Selecione o nível</option>
+                        <option value="Baixo">Baixo</option>
+                        <option value="Médio">Médio</option>
+                        <option value="Alto">Alto</option>
+                        <option value="Crítico">Crítico</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Mensagem</label>
+                    <textarea th:field="*{mensagemSaude}" class="form-input" rows="5"
+                              placeholder="Digite a mensagem de recomendação..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit"
+                        th:text="${recomendacaoSaudeDTO.idRecomendacao != null} ? 'Atualizar' : 'Salvar'">Salvar</button>
+            </form>
+        </div>
+
+        <!-- Lista -->
+        <div class="form-box">
+            <div class="form-header">
+                <div class="form-icon">📊</div>
+                <h2>Recomendações de Saúde Existentes</h2>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tipo</th>
+                        <th>Nível Alerta</th>
+                        <th>Mensagem</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="rec : ${recomendacoes}">
+                        <td th:text="${rec.idRecomendacao}"></td>
+                        <td th:text="${rec.tipoSaude}"></td>
+                        <td th:text="${rec.nivelAlerta}"></td>
+                        <td th:text="${#strings.abbreviate(rec.mensagemSaude, 50)}"></td>
+                        <td>
+                            <a class="btn-secondary" th:href="@{/recomendacoes/saude/editar/{id}(id=${rec.idRecomendacao})}">Editar</a>
+                            <a class="btn-danger" th:href="@{/recomendacoes/saude/deletar/{id}(id=${rec.idRecomendacao})}" onclick="return confirm('Deseja realmente deletar?');">Deletar</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(recomendacoes)}">
+                        <td colspan="5" style="text-align:center;">Nenhuma recomendação cadastrada.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
 </div>
+
 </body>
 </html>
