@@ -203,7 +203,7 @@ O projeto está configurado para rodar no Render, incluindo o banco de dados Pos
 
 ## 🚀 Funcionalidades
 
-* Cadastro de usuários com roles (`ROLE_USER`, `ROLE_ADMIN`)
+* Cadastro e login de usuários com roles (`ROLE_USER`, `ROLE_ADMIN`)
 * Registro de bem-estar (humor, horas de sono, nível de estresse e energia)
 * Cadastro de competências e vinculação com usuários
 * Recomendação de saúde e carreira (profissional)
