@@ -212,6 +212,9 @@ O projeto está configurado para rodar no Render, incluindo o banco de dados Pos
 * Filas assíncronas com **RabbitMQ**
 * Paginação
 * Aplicação adequada de caching
+* Internacionalização em pt em en
+* Pacote exception para tratamento de erros nas classes
+* Validação
 
 
 ---
