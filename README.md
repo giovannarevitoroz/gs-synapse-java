@@ -1,6 +1,6 @@
 # Synapse
 
-![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)
+![Logo](<img width="530" height="283" alt="Captura de tela 2025-11-21 092128" src="https://github.com/user-attachments/assets/361d517f-b7e2-491f-aeef-5a0c84d9e98c" />)
 
 API para gerenciamento de recomendações de saúde e carreira, registro de bem-estar e competências de usuários para integração com IA.
 
