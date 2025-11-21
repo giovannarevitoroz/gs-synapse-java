@@ -2,12 +2,14 @@ package com.fiap.gs_synapse.view;
 
 import com.fiap.gs_synapse.dto.CompetenciaDTO;
 import com.fiap.gs_synapse.service.CompetenciaService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/competencias") // Rota base: /competencias
+@RequestMapping("/competencias")
 public class CompetenciaViewController {
 
     private final CompetenciaService service;
@@ -16,11 +18,16 @@ public class CompetenciaViewController {
         this.service = service;
     }
 
-    // LISTAR COMPETÊNCIAS
+    // LISTAR COMPETÊNCIAS COM PAGINAÇÃO
     @GetMapping("/listar")
-    public String listar(Model model) {
-        // Note: É mais comum usar Page<T> e Pageable aqui, mas mantendo o .getContent() para fins de exemplo
-        model.addAttribute("competencias", service.listar(org.springframework.data.domain.Pageable.unpaged()).getContent());
+    public String listar(Model model,
+                         @RequestParam(defaultValue = "0") int page,
+                         @RequestParam(defaultValue = "10") int size) {
+        Page<CompetenciaDTO> competenciasPage = service.listar(PageRequest.of(page, size));
+        model.addAttribute("competencias", competenciasPage.getContent()); // lista simples
+        model.addAttribute("paginaAtual", competenciasPage.getNumber());
+        model.addAttribute("totalPaginas", competenciasPage.getTotalPages());
+        model.addAttribute("competencia", new CompetenciaDTO());
         return "competencias/lista";
     }
 
@@ -34,8 +41,8 @@ public class CompetenciaViewController {
     // FORM PARA EDITAR (GET /competencias/editar/{id})
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
-        // Certifique-se de que o service.buscarPorId() retorne um DTO
-        model.addAttribute("competencia", service.buscarPorId(id));
+        CompetenciaDTO dto = service.buscarPorId(id);
+        model.addAttribute("competencia", dto);
         return "competencias/editar";
     }
 
@@ -54,7 +61,6 @@ public class CompetenciaViewController {
     @GetMapping("/deletar/{id}")
     public String deletar(@PathVariable Long id) {
         service.deletar(id);
-        // 🛠️ FIX: Redireciona para a rota de listagem correta
         return "redirect:/competencias/listar";
     }
 }

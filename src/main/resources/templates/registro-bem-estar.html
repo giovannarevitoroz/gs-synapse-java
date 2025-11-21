@@ -6,124 +6,124 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<div th:replace="layout :: conteudo">
-    <div class="listing-container">
 
-        <!-- Cabeçalho -->
-        <div class="listing-header">
-            <h1>Registro de Bem-Estar</h1>
-        </div>
+<div class="listing-container">
 
-        <div class="forms-container">
+    <!-- Cabeçalho -->
+    <div class="listing-header">
+        <h1>Registro de Bem-Estar</h1>
+    </div>
 
-            <!-- Formulário -->
-            <div class="form-box">
-                <div class="form-header">
-                    <div class="form-icon">🌿</div>
-                    <h2 th:text="${registroDTO.idRegistro != null} ? 'Editar Registro' : 'Novo Registro'"></h2>
-                </div>
+    <div class="forms-container">
 
-                <form th:action="@{/bemestar/salvar}" th:object="${registroDTO}" method="post">
-                    <input type="hidden" th:field="*{idRegistro}" />
-
-                    <div class="form-group">
-                        <label class="form-label">Data</label>
-                        <input type="date" th:field="*{dataRegistro}" class="form-input" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Humor</label>
-                        <input type="text" th:field="*{humorRegistro}" class="form-input" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Horas de Sono</label>
-                        <input type="number" th:field="*{horasSono}" class="form-input" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Horas de Trabalho</label>
-                        <input type="number" th:field="*{horasTrabalho}" class="form-input" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Nível de Energia (0-10)</label>
-                        <input type="range" th:field="*{nivelEnergia}" min="0" max="10" class="form-input"
-                               oninput="this.nextElementSibling.value = this.value">
-                        <output>5</output>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Nível de Estresse (0-10)</label>
-                        <input type="range" th:field="*{nivelEstresse}" min="0" max="10" class="form-input"
-                               oninput="this.nextElementSibling.value = this.value">
-                        <output>5</output>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Observações</label>
-                        <textarea th:field="*{observacaoRegistro}" class="form-input" rows="4"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">ID do Usuário</label>
-                        <input type="number" th:field="*{usuarioId}" class="form-input" required>
-                    </div>
-
-                    <button type="submit" class="btn-submit"
-                            th:text="${registroDTO.idRegistro != null} ? 'Atualizar' : 'Salvar'"></button>
-                </form>
+        <!-- FORMULÁRIO -->
+        <div class="form-box">
+            <div class="form-header">
+                <div class="form-icon">🌿</div>
+                <h2 th:text="${registroDTO.idRegistro != null} ? 'Editar Registro' : 'Novo Registro'"></h2>
             </div>
 
-            <!-- Lista -->
-            <div class="form-box">
-                <div class="form-header">
-                    <div class="form-icon">📊</div>
-                    <h2>Registros Existentes</h2>
+            <form th:action="@{/bemestar/salvar}" th:object="${registroDTO}" method="post">
+                <input type="hidden" th:field="*{idRegistro}" />
+
+                <div class="form-group">
+                    <label class="form-label">Data</label>
+                    <input type="date" th:field="*{dataRegistro}" class="form-input" required>
                 </div>
 
-                <div class="table-container">
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Data</th>
-                            <th>Humor</th>
-                            <th>Sono</th>
-                            <th>Trabalho</th>
-                            <th>Energia</th>
-                            <th>Estresse</th>
-                            <th>Observações</th>
-                            <th>Usuário</th>
-                            <th>Ações</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="reg : ${registros}">
-                            <td th:text="${reg.idRegistro}"></td>
-                            <td th:text="${reg.dataRegistro}"></td>
-                            <td th:text="${reg.humorRegistro}"></td>
-                            <td th:text="${reg.horasSono}"></td>
-                            <td th:text="${reg.horasTrabalho}"></td>
-                            <td th:text="${reg.nivelEnergia}"></td>
-                            <td th:text="${reg.nivelEstresse}"></td>
-                            <td th:text="${reg.observacaoRegistro}"></td>
-                            <td th:text="${reg.usuarioId}"></td>
-                            <td>
-                                <a class="btn-secondary" th:href="@{/bemestar/editar/{id}(id=${reg.idRegistro})}">Editar</a>
-                                <a class="btn-danger" th:href="@{/bemestar/deletar/{id}(id=${reg.idRegistro})}" onclick="return confirm('Deseja realmente excluir?');">Excluir</a>
-                            </td>
-                        </tr>
-                        <tr th:if="${#lists.isEmpty(registros.content)}">
-                            <td colspan="10" style="text-align:center;">Nenhum registro encontrado.</td>
-                        </tr>
-                        </tbody>
-                    </table>
+                <div class="form-group">
+                    <label class="form-label">Humor</label>
+                    <input type="text" th:field="*{humorRegistro}" class="form-input" required>
                 </div>
+
+                <div class="form-group">
+                    <label class="form-label">Horas de Sono</label>
+                    <input type="number" th:field="*{horasSono}" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Horas de Trabalho</label>
+                    <input type="number" th:field="*{horasTrabalho}" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nível de Energia (0-10)</label>
+                    <input type="range" th:field="*{nivelEnergia}" min="0" max="10" class="form-input"
+                           oninput="this.nextElementSibling.value = this.value">
+                    <output>5</output>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nível de Estresse (0-10)</label>
+                    <input type="range" th:field="*{nivelEstresse}" min="0" max="10" class="form-input"
+                           oninput="this.nextElementSibling.value = this.value">
+                    <output>5</output>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Observações</label>
+                    <textarea th:field="*{observacaoRegistro}" class="form-input" rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">ID do Usuário</label>
+                    <input type="number" th:field="*{usuarioId}" class="form-input" required>
+                </div>
+
+                <button type="submit" class="btn-submit"
+                        th:text="${registroDTO.idRegistro != null} ? 'Atualizar' : 'Salvar'"></button>
+            </form>
+        </div>
+
+        <!-- LISTA -->
+        <div class="form-box">
+            <div class="form-header">
+                <div class="form-icon">📊</div>
+                <h2>Registros Existentes</h2>
             </div>
 
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Data</th>
+                        <th>Humor</th>
+                        <th>Sono</th>
+                        <th>Trabalho</th>
+                        <th>Energia</th>
+                        <th>Estresse</th>
+                        <th>Observações</th>
+                        <th>Usuário</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="reg : ${registros}">
+                        <td th:text="${reg.idRegistro}"></td>
+                        <td th:text="${reg.dataRegistro}"></td>
+                        <td th:text="${reg.humorRegistro}"></td>
+                        <td th:text="${reg.horasSono}"></td>
+                        <td th:text="${reg.horasTrabalho}"></td>
+                        <td th:text="${reg.nivelEnergia}"></td>
+                        <td th:text="${reg.nivelEstresse}"></td>
+                        <td th:text="${reg.observacaoRegistro}"></td>
+                        <td th:text="${reg.usuarioId}"></td>
+                        <td>
+                            <a class="btn-secondary" th:href="@{/bemestar/editar/{id}(id=${reg.idRegistro})}">Editar</a>
+                            <a class="btn-danger" th:href="@{/bemestar/deletar/{id}(id=${reg.idRegistro})}" onclick="return confirm('Deseja realmente excluir?');">Excluir</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(registros.content)}">
+                        <td colspan="10" style="text-align:center;">Nenhum registro encontrado.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
+
     </div>
 </div>
+
 </body>
 </html>

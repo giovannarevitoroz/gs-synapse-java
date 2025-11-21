@@ -6,110 +6,106 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<div th:replace="layout :: conteudo">
-    <div class="listing-container">
 
-        <div class="listing-header">
-            <h1>Recomendações</h1>
-            <div class="listing-actions">
-                <a href="#" class="btn-primary">Nova Recomendação</a>
-            </div>
-        </div>
-
-        <div class="forms-container">
-
-            <!-- FORMULÁRIO: CRIAR OU EDITAR -->
-            <div class="form-box">
-                <div class="form-header">
-                    <div class="form-icon">💡</div>
-                    <h2 th:text="${recomendacaoDTO.idRecomendacao != null} ? 'Editar Recomendação' : 'Nova Recomendação'">Nova Recomendação</h2>
-                </div>
-
-                <form th:action="${recomendacaoDTO.idRecomendacao != null} ?
-                                  @{'/recomendacoes/atualizar/' + ${recomendacaoDTO.idRecomendacao}} :
-                                  @{/recomendacoes/salvar}"
-                      th:object="${recomendacaoDTO}" method="post">
-
-                    <input type="hidden" th:field="*{idRecomendacao}" />
-
-                    <div class="form-group">
-                        <label class="form-label">Título</label>
-                        <input type="text" th:field="*{tituloRecomendacao}" class="form-input" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Descrição</label>
-                        <textarea th:field="*{descricaoRecomendacao}" class="form-input" rows="4" required></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Prompt Usado</label>
-                        <input type="text" th:field="*{promptUsado}" class="form-input" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Data</label>
-                        <input type="date" th:field="*{dataRecomendacao}" class="form-input" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">ID Usuário</label>
-                        <input type="number" th:field="*{usuarioId}" class="form-input">
-                    </div>
-
-                    <button type="submit" class="btn-submit"
-                            th:text="${recomendacaoDTO.idRecomendacao != null} ? 'Atualizar' : 'Salvar'">
-                        Salvar
-                    </button>
-                </form>
-            </div>
-
-            <!-- LISTA DE RECOMENDAÇÕES -->
-            <div class="form-box">
-                <div class="form-header">
-                    <div class="form-icon">📋</div>
-                    <h2>Recomendações Existentes</h2>
-                </div>
-
-                <div class="table-container">
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Título</th>
-                            <th>Descrição</th>
-                            <th>Prompt</th>
-                            <th>Data</th>
-                            <th>Usuário</th>
-                            <th>Ações</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="rec : ${recomendacoes}">
-                            <td th:text="${rec.idRecomendacao}"></td>
-                            <td th:text="${rec.tituloRecomendacao}"></td>
-                            <td th:text="${rec.descricaoRecomendacao}"></td>
-                            <td th:text="${rec.promptUsado}"></td>
-                            <td th:text="${#dates.format(rec.dataRecomendacao, 'dd/MM/yyyy')}"></td>
-                            <td th:text="${rec.usuarioId}"></td>
-                            <td>
-                                <a class="btn-secondary"
-                                   th:href="@{/recomendacoes/editar/{id}(id=${rec.idRecomendacao})}">Editar</a>
-                                <a class="btn-danger"
-                                   th:href="@{/recomendacoes/deletar/{id}(id=${rec.idRecomendacao})}"
-                                   onclick="return confirm('Deseja realmente deletar?')">Deletar</a>
-                            </td>
-                        </tr>
-                        <tr th:if="${#lists.isEmpty(recomendacoes)}">
-                            <td colspan="7" style="text-align:center;">Nenhuma recomendação cadastrada.</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
+<div class="listing-container">
+    <div class="listing-header">
+        <h1>Recomendações</h1>
+        <div class="listing-actions">
+            <a th:href="@{/recomendacoes/novo}" class="btn-primary">Nova Recomendação</a>
         </div>
     </div>
+
+    <div class="forms-container">
+
+        <!-- FORMULÁRIO: CRIAR OU EDITAR -->
+        <div class="form-box">
+            <div class="form-header">
+                <div class="form-icon">💡</div>
+                <h2 th:text="${recomendacaoDTO.idRecomendacao != null} ? 'Editar Recomendação' : 'Nova Recomendação'">Nova Recomendação</h2>
+            </div>
+
+            <form th:action="@{/recomendacoes/salvar}" th:object="${recomendacaoDTO}" method="post">
+
+                <input type="hidden" th:field="*{idRecomendacao}" />
+
+                <div class="form-group">
+                    <label class="form-label">Título</label>
+                    <input type="text" th:field="*{tituloRecomendacao}" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Descrição</label>
+                    <textarea th:field="*{descricaoRecomendacao}" class="form-input" rows="4" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Prompt Usado</label>
+                    <input type="text" th:field="*{promptUsado}" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Data</label>
+                    <input type="date" th:field="*{dataRecomendacao}" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">ID Usuário</label>
+                    <input type="number" th:field="*{usuarioId}" class="form-input">
+                </div>
+
+                <button type="submit" class="btn-submit"
+                        th:text="${recomendacaoDTO.idRecomendacao != null} ? 'Atualizar' : 'Salvar'">
+                    Salvar
+                </button>
+            </form>
+        </div>
+
+        <!-- LISTA DE RECOMENDAÇÕES -->
+        <div class="form-box">
+            <div class="form-header">
+                <div class="form-icon">📋</div>
+                <h2>Recomendações Existentes</h2>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Descrição</th>
+                        <th>Prompt</th>
+                        <th>Data</th>
+                        <th>Usuário</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="rec : ${recomendacoes}">
+                        <td th:text="${rec.idRecomendacao}"></td>
+                        <td th:text="${rec.tituloRecomendacao}"></td>
+                        <td th:text="${rec.descricaoRecomendacao}"></td>
+                        <td th:text="${rec.promptUsado}"></td>
+                        <td th:text="${#dates.format(rec.dataRecomendacao, 'dd/MM/yyyy')}"></td>
+                        <td th:text="${rec.usuarioId}"></td>
+                        <td>
+                            <a class="btn-secondary"
+                               th:href="@{/recomendacoes/editar/{id}(id=${rec.idRecomendacao})}">Editar</a>
+                            <a class="btn-danger"
+                               th:href="@{/recomendacoes/deletar/{id}(id=${rec.idRecomendacao})}"
+                               onclick="return confirm('Deseja realmente deletar?')">Deletar</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(recomendacoes)}">
+                        <td colspan="7" style="text-align:center;">Nenhuma recomendação cadastrada.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
 </div>
+
 </body>
 </html>

@@ -20,15 +20,10 @@
         <div class="form-box">
             <div class="form-header">
                 <div class="form-icon">🚀</div>
-                <h2 th:text="${competencia.idCompetencia != null} ?
-                          'Editar Competência' : 'Nova Competência'"></h2>
+                <h2 th:text="${competencia.idCompetencia != null} ? 'Editar Competência' : 'Nova Competência'"></h2>
             </div>
 
-            <form th:action="${competencia.idCompetencia != null} ?
-                    @{'/competencias/atualizar/' + ${competencia.idCompetencia}} :
-                    @{/competencias/salvar}"
-                  th:object="${competencia}" method="post">
-
+            <form th:action="@{/competencias/salvar}" th:object="${competencia}" method="post">
                 <input type="hidden" th:field="*{idCompetencia}" />
 
                 <div class="form-group">
@@ -96,18 +91,24 @@
                         <td th:text="${#strings.abbreviate(comp.descricaoCompetencia, 60)}"></td>
                         <td>
                             <a class="btn-secondary"
-                               th:href="@{/competencias/editar/{id}(id=${comp.idCompetencia})}">
-                                Editar
-                            </a>
+                               th:href="@{/competencias/editar/{id}(id=${comp.idCompetencia})}">Editar</a>
                             <a class="btn-danger"
                                th:href="@{/competencias/deletar/{id}(id=${comp.idCompetencia})}"
-                               onclick="return confirm('Deseja realmente deletar esta competência?');">
-                                Deletar
-                            </a>
+                               onclick="return confirm('Deseja realmente deletar esta competência?');">Deletar</a>
                         </td>
                     </tr>
                     </tbody>
                 </table>
+
+                <!-- Paginação simples -->
+                <div class="pagination">
+                    <button th:disabled="${paginaAtual == 0}"
+                            th:onclick="'window.location=\'?page=' + (${paginaAtual} - 1) + '\';'">Anterior</button>
+                    <span>Página <span th:text="${paginaAtual + 1}"></span> de <span th:text="${totalPaginas}"></span></span>
+                    <button th:disabled="${paginaAtual + 1 >= totalPaginas}"
+                            th:onclick="'window.location=\'?page=' + (${paginaAtual} + 1) + '\';'">Próximo</button>
+                </div>
+
             </div>
         </div>
     </div>
