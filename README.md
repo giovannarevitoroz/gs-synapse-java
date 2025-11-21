@@ -85,7 +85,7 @@ Synapse/
 └── 📄 pom.xml
 ```
 
-```
+```mermaid
 graph TD
     A[com.fiap:gs-synapse:0.0.1-SNAPSHOT]
 
