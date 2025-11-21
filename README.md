@@ -24,6 +24,7 @@ Principais pontos do desafio:
 O projeto está deployado no **Render**:
 
 * [Link do deploy](https://gs-synapse.onrender.com)
+* [Link do vídeo](https://gs-synapse.onrender.com)
 
 ---
 
@@ -209,6 +210,9 @@ O projeto está configurado para rodar no Render, incluindo o banco de dados Pos
 * Recomendação de saúde e carreira (profissional)
 * Segurança via **JWT** e Spring Security
 * Filas assíncronas com **RabbitMQ**
+* Paginação
+* Aplicação adequada de caching
+
 
 ---
 
