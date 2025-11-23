@@ -4,10 +4,10 @@
 
 API para gerenciamento de recomendações de saúde e carreira, registro de bem-estar e competências de usuários para integração com IA.
 
-👩‍💻 Integrantes
-Giovanna Revito Roz - RM558981
-Kaian Gustavo de Oliveira Nascimento - RM558986
-Lucas Kenji Kikuchi - RM554424
+##👩‍💻 Integrantes
+-Giovanna Revito Roz - RM558981
+-Kaian Gustavo de Oliveira Nascimento - RM558986
+-Lucas Kenji Kikuchi - RM554424
 ---
 
 ## 🌟 O Futuro do Trabalho
