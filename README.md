@@ -427,10 +427,3 @@ graph LR
 * Implementação de segurança JWT e roles de usuário
 * Estrutura modularizada (API, dados, segurança, UI com Thymeleaf)
 
-## Aprendizados
-
----
-Giovanna Revito Roz
-Lucas Kenji Kikuchi
-Kaian Gustavo 
-
