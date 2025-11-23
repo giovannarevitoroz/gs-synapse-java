@@ -1,7 +1,13 @@
+
+
 # Synapse
 
 API para gerenciamento de recomendações de saúde e carreira, registro de bem-estar e competências de usuários para integração com IA.
 
+👩‍💻 Integrantes
+Giovanna Revito Roz - RM558981
+Kaian Gustavo de Oliveira Nascimento - RM558986
+Lucas Kenji Kikuchi - RM554424
 ---
 
 ## 🌟 O Futuro do Trabalho
@@ -25,6 +31,37 @@ O projeto está deployado no **Render**:
 * [Link do vídeo](https://www.youtube.com/watch?v=nm4-LZsHj1M)
 * [Link do pitch](https://youtu.be/s7cH_2vpfaY)
 
+## 🧠 Descrição do Projeto
+
+O **Synapse** é uma plataforma inteligente que combina:
+
+### 🔹 Orientação Profissional  
+O usuário informa área atual, área de interesse, competências e objetivos.  
+
+- Vagas potenciais  
+- Cursos e trilhas de aprendizado  
+- Áreas sugeridas  
+- Próximos passos de carreira  
+
+### 🔹 Bem-estar (Saúde Emocional & Rotina)  
+O usuário registra diariamente informações como:  
+
+- Horas de sono  
+- Horas de trabalho  
+- Humor  
+- Nível de estresse  
+- Energia  
+
+A IA analisa os registros e gera:
+
+- Alertas de saúde emocional  
+- Sugestões de rotina  
+- Hábitos saudáveis  
+- Recomendações personalizadas  
+
+O Synapse une **carreira + bem-estar** em um ambiente inteligente para apoiar o desenvolvimento pessoal e profissional.
+
+---
 
 ---
 
